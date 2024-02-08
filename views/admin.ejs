@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Employee Management System</title>
+    <style>
+        body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .admin-logo {
+    margin-right: 10px;
+}
+
+header .welcome-text {
+    margin-left: 10px;
+}
+
+nav {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding-top: 20px;
+    height: 100vh;
+    position: fixed;
+}
+
+nav a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="admin-logo">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="welcome-text">
+            Welcome back, Admin
+        </div>
+    </header>
+
+    <nav>
+        <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#"><i class="fas fa-building"></i> Department</a>
+        <a href="/NewEmp"><i class="fas fa-user-tie"></i> Employee</a>
+        <a href="#"><i class="fas fa-money-bill-wave"></i> Salary</a>
+        <a href="#"><i class="fas fa-clipboard-list"></i> Leave Request</a>
+        <a href="/query"><i class="fas fa-clipboard-list"></i> query </a>
+        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="content">
+        <!-- Content goes here -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Add your JavaScript code here, if needed
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="main.css"> -->
+    <title>Employee Management System</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Adjusted width for laptop screens */
+    max-width: 600px; /* Set a maximum width */
+    margin: auto; /* Center the form */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    form {
+        width: 90%; /* Adjusted width for smaller screens */
+    }
+}
+    </style>
+</head>
+<body>
+    <form action="/emp/profile/add" method="post">
+        <h2>Employee Details</h2>
+
+        <label for="employeeId">Employee ID:</label>
+        <input type="text" id="employeeId" name="employeeId" required>
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="department">Department:</label>
+        <select id="department" name="department" required>
+            <option value="" disabled selected>Select Department</option>
+            <option value="Human Resources">Human Resources</option>
+            <option value="Information Technology">Information Technology</option>
+            <option value="Finance">Finance</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="mobile">Mobile No:</label>
+        <input type="tel" id="mobile" name="mobile" required>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+
+        <label for="doj">Date of Joining:</label>
+        <input type="date" id="doj" name="doj" required>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" rows="4" required></textarea>
+
+        <!-- <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required> -->
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="./index.ejs"></script>
+</body>
+
+</html>

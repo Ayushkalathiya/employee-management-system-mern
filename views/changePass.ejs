@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Change Password</h1>
+    <form action="/change" method="POST">
+        <label for="Pass">New Password:</label>
+        <input type="password" id="Pass" name="Pass" required>
+        <label for="Confirm">Retype Password:</label>
+        <input type="hidden" id="Confirm" name="Confirm" required>
+        <br><br>
+        <button type="submit" id="submit">
+            Submit
+        </button>
+    </form>
+</body>
+<script>
+    var Pass = document.getElementById("Pass");
+    var Confirm = document.getElementById("Confirm");
+    let traps = document.getElementById("submit");
+    let check;
+
+    Pass.addEventListener("keyup", function() {
+        checkpassword(Pass.value);
+    });
+
+    function checkpassword(password) {
+        
+    var strength = 0;
+    if (password.match(/[a-z]+/)) {
+        strength += 1;
+    }
+    if (password.match(/[A-Z]+/)) {
+        strength += 1;
+    }
+    if (password.match(/[0-9]+/)) {
+        strength += 1;
+    }
+    if (password.match(/[$@#&!]+/)) {
+        strength += 1;
+    }
+    if (password.length > 8 && strength==4) {
+        check=password;
+        Confirm.type="password";
+    }
+    else{
+        Confirm.type="hidden";
+    }
+
+    Confirm.addEventListener("keyup", function() {
+        confirmpassword(Confirm.value);
+    });
+
+    function confirmpassword(confirm) {
+        if(check==confirm){
+            traps.disabled=false;
+        }
+        else{
+            traps.disabled=true;
+        }
+    }
+}
+</script>
+</html>

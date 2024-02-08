@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h1>REGISTER</h1>
+    <form action="/register" method="POST">
+        <label for="username">UserId:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit" id="submit">
+            Submit
+        </button>
+    </form>
+</body>
+
+
+<!-- <script>
+    var code = document.getElementById("password");
+    let traps = document.getElementById("submit");
+
+code.addEventListener("keyup", function() {
+  checkpassword(code.value);
+});
+
+
+function checkpassword(password) {
+  var strength = 0;
+  if (password.match(/[a-z]+/)) {
+    strength += 1;
+  }
+  if (password.match(/[A-Z]+/)) {
+    strength += 1;
+  }
+  if (password.match(/[0-9]+/)) {
+    strength += 1;
+  }
+  if (password.match(/[$@#&!]+/)) {
+    strength += 1;
+
+  }
+  if (password.length > 8 && strength==4) {
+    traps.disabled = false;
+  }
+  else{
+    traps.disabled = true;
+  }
+}
+</script> -->
+</html>
