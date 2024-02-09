@@ -29,6 +29,16 @@ app.get("/", (req, res) => {
     res.render("login.ejs");
 });
 
+// app.get("/forget", async(req, res) => {
+//     try{
+//         check = (await db.query("Select * from Credential where EmpId = $1",[employeeName])).rows;
+//     }
+//     catch(err){
+//         console.log(err);
+//     }
+//     res.render("forgetPass.ejs",{check: check});
+// });
+
 app.get("/final", (req, res) => {
     //For normal User
     res.render("final.ejs");
