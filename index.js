@@ -44,6 +44,9 @@ app.get("/final", (req, res) => {
     res.render("final.ejs");
 });
 
+
+//aSADASDSADASDASD
+//ASD/ASDASDASD
 app.get("/NewEmp", (req, res) => {
     if(user=="admin"){
         res.render("NewEmp.ejs");
