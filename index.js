@@ -21,9 +21,32 @@ db.connect();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+
 // Login the admin
 const saltRounds = 10;
-let user;
+let user,roles,finalRole,departments;
+
+async function main(){
+    try{
+        roles = (await db.query("Select RoleId,RoleName from Roles")).rows;
+        departments = (await db.query("Select DeptID,DeptName from Departments")).rows;
+        console.log(roles)
+        console.log(departments)
+
+    } 
+    catch(err){
+        console.log(err);
+    }
+} 
+main();
+
+function findRoleName(roleID){
+    for(let i=0; i<roles.length; i++){
+        if(roles[i].roleid==roleID){
+            return roles[i].rolename
+        }
+    }
+}
 
 app.get("/", (req, res) => {
     res.render("login.ejs");
@@ -45,15 +68,8 @@ app.get("/final", (req, res) => {
 });
 
 
-//aSADASDSADASDASD
-//ASD/ASDASDASD
 app.get("/NewEmp", (req, res) => {
-    if(user=="admin"){
-        res.render("NewEmp.ejs");
-    }
-    else{
-        res.redirect("/");
-    }
+    res.render("NewEmp.ejs");
 });
 
 app.post("/register", async (req, res) => {
@@ -61,7 +77,7 @@ app.post("/register", async (req, res) => {
     var check=[];
     const employeeName = req.body.employeeName;
     try{
-        check = (await db.query("Select * from Credential where EmpId = $1",[employeeName])).rows;
+        check = (await db.query("Select * from Credentials where EmpId = $1",[employeeName])).rows;
         console.log(check);
         
         //If user does not exists
@@ -69,7 +85,7 @@ app.post("/register", async (req, res) => {
             //await db.query("Insert into Credential values($1,'user',$2)",[employeeName,hash])
             const name=employeeName;
             bcrypt.hash(name, saltRounds, async (err, hash)=> {
-                await db.query("Insert into Credential values($1,'user',$2)",[employeeName,hash])
+                await db.query("Insert into Credentials values($1,$2)",[employeeName,hash])
             });
             console.log(hash);
             res.redirect("/NewEmp");
@@ -81,6 +97,7 @@ app.post("/register", async (req, res) => {
 });
 
 var userName,OTP;
+
 app.post("/verify", async (req, res) => {
     
     var check=[];
@@ -88,7 +105,7 @@ app.post("/verify", async (req, res) => {
     const password = req.body.password;
     console.log(userName+" "+password)
     try{
-        check = (await db.query("Select * from Credential where EmpId = $1",[userName])).rows;
+        check = (await db.query("Select * from Credentials where EmployeeId = $1",[userName])).rows;
         console.log(check);
         console.log(check.length);
     }
@@ -115,10 +132,23 @@ app.post("/verify", async (req, res) => {
             });
         }else{
             user=userName;
-            bcrypt.compare(password, check[0].password, function (err, result) {            
+            bcrypt.compare(password, check[0].password, async function (err, result) {            
                 console.log(result);
+                let id;
+                try{
+                    id = (await db.query("Select roleID from Employees where EmployeeId = $1",[userName])).rows;
+                    console.log(id)
+                    // finalRole = roles.find(role => role.roleid == id[0].roleid).rolename;
+                    finalRole = findRoleName(id[0].roleid);
+                    console.log(finalRole)
+                    console.log(check);
+                    console.log(check.length);
+                }
+                catch(err){
+                    console.log(err);
+                }
                 if (result == true) {
-                    if(check[0].role=="admin"){
+                    if(finalRole=="admin"){
                         otp();
                         res.render("otp.ejs",{OTP : OTP});
                     }else{
@@ -138,7 +168,7 @@ app.post("/verify", async (req, res) => {
 app.post("/change", async (req, res) => {
     bcrypt.hash(req.body.Pass, saltRounds, async function (err, hash) {
         try{
-            await db.query("Update Credential set password=$1 where empid=$2",[hash,userName])
+            await db.query("Update Credentials set password=$1 where empid=EM-1",[hash])
         }
         catch(err){
             console.log(err);
@@ -153,7 +183,7 @@ app.post("/final", async (req, res) => {
     console.log(enteredOTP);
     if(enteredOTP == OTP){
         //Render the Admin Page
-        user="admin";
+        finalRole="admin";
         res.render("admin.ejs");
     }else{
         res.render("otp.ejs");
@@ -202,20 +232,22 @@ app.post("/emp/profile/add", async(req, res) => {
     const F_name = req.body.firstName;
     const L_name = req.body.lastName;
     const Dept_name = req.body.department;
+    const finaldeptid = departments.find(dept => dept.deptname == Dept_name).DeptID;
     const Email = req.body.email;
     const Mo_no = req.body.mobile;
-    const country = req.body.country;
-    const Stat = req.body.state;
-    const City = req.body.city;
+    let userRoleToBeAdded = roles.find(role => role.roleName == userRoleToBeAdded).roleID;
+    // const country = req.body.country;
+    // const Stat = req.body.state;
+    // const City = req.body.city;
     const DOB = req.body.dob;
     const DOJ = req.body.doj;
-    const Add = req.body.address;
+    // const Add = req.body.address;
     
     console.log(Dept_name);
     
     try{
-        await db.query("INSERT INTO employee VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)",
-        [Emp_id,F_name,L_name,Dept_name,Email,Mo_no,country,Stat,City,DOB,DOJ,Add]);
+        await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,DOB,Email,Roleid,Deptid,DOJ) VALUES($1,$2,$3,$4,$5,$6,$7,$8)",
+        [Emp_id,F_name,L_name,DOB,Email,userRoleToBeAdded,finaldeptid,DOJ]);
         res.redirect("/emp");
     }catch(err){
         console.log(err);
