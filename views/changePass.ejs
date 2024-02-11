@@ -33,7 +33,7 @@
     <div class="card" style="width: 400px;">
       <div class="card-body">
         <h3 class="card-title text-center">Change Password</h3>
-        <form action="/change" method="POST">
+        <form action="/change/<%= token %>" method="POST"> <!-- Include token in form action -->
           <div class="form-group">
             <label for="new-password">New Password</label>
             <input type="password" class="form-control" id="Pass" name="Pass" required>

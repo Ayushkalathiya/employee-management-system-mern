@@ -5,6 +5,7 @@ const nodemailer = require("nodemailer");
 const bcrypt =  require("bcrypt");
 const { Workbook } = require('exceljs');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ db.connect();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+app.set('view engine', 'ejs');
 
 
 // Login the admin
@@ -40,6 +42,22 @@ async function main(){
 } 
 main();
 
+// Function to insert the token into the database
+async function insertToken(EmployeeId, token) {
+    try {
+        // Calculate expiration date (1 hour from now)
+        const expirationDate = new Date();
+        expirationDate.setHours(expirationDate.getHours() + 1);
+
+        // Convert expiration date to a timestamp format
+        const expirationTimestamp = expirationDate.toISOString();
+
+        await db.query('INSERT INTO resetPass (Employeeid, resettoken, expiration) VALUES ($1, $2, $3)', [EmployeeId, token, expirationTimestamp]);
+    } catch (error) {
+        console.error('Error inserting token into database:', error);
+    }
+}
+
 function findRoleName(roleID){
     for(let i=0; i<roles.length; i++){
         if(roles[i].roleid==roleID){
@@ -48,19 +66,113 @@ function findRoleName(roleID){
     }
 }
 
+// Function to generate a JWT token with user identifier (e.g., email or user ID) as payload
+function generateResetToken(employeeID) {
+    const token = jwt.sign({ userId: employeeID }, process.env.JWT_SECRET); 
+    return token;
+}
+
+// Function to verify the JWT token provided by the user
+function verifyResetToken(token) {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return decoded;
+    } catch (error) {
+        console.error('Token verification failed:', error);
+        return null;
+    }
+}
+async function SendMailforReset(EmailID,Message,Subject){
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        }
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: EmailID,
+        subject: Subject,
+        html: Message
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
 app.get("/", (req, res) => {
     res.render("login.ejs");
 });
 
-// app.get("/forget", async(req, res) => {
-//     try{
-//         check = (await db.query("Select * from Credential where EmpId = $1",[employeeName])).rows;
-//     }
-//     catch(err){
-//         console.log(err);
-//     }
-//     res.render("forgetPass.ejs",{check: check});
-// });
+app.get("/forgot", async (req, res) => {
+    res.render("forgetPass.ejs");
+});
+
+app.post("/forgot", async (req, res) => {
+    const  {employeeID}  = req.body;
+    console.log(employeeID)
+    try {
+        const user = (await db.query("SELECT * FROM credentials WHERE employeeid = $1", [employeeID])).rows;
+        if (user.length === 0) {
+            // User not found, redirect back to the forgot password page with an error message
+            res.render("forgetPass.ejs", { error: "User not found" });
+            return;
+        }
+    }
+    catch (error) {
+        console.error("Error processing forgot password request:", error);
+        res.status(500).send("Internal Server Error");
+    }
+    // Generate a reset token for the user
+    const resetToken = generateResetToken(employeeID);
+    insertToken(employeeID, resetToken);
+    const Email = (await db.query('Select Email from Employees where EmployeeId = $1',[employeeID])).rows;
+    console.log("EMAIL")
+    console.log(Email)
+    const Subject = "PASSWORD RESET";
+    const html = `<p>Click <a href="http://localhost:3000/reset-password/`+resetToken+`>here</a> to reset your password.</p>`
+    SendMailforReset(Email[0].email,html,Subject);
+    res.render("mailSent.ejs");
+});
+
+app.get('/reset-password/:token', async (req, res) => {
+    const token = req.params.token;
+    console.log(token);
+    
+    // Verify the reset token provided by the user
+    const decodedToken = verifyResetToken(token);
+
+    if (!decodedToken || !decodedToken.userId) {
+        // If the token is invalid or doesn't contain the required information, return an error response
+        return res.status(400).send('Invalid or expired token');
+    }
+
+    // Check if the token exists in the database and is not expired
+    try {
+        await db.query('Delete * from resetPass where exipration < NOW()');
+        const result = await db.query('SELECT * FROM resetPass WHERE resettoken = $1 AND expiration > NOW()', [token]);
+        console.log(result.rows)
+        if (result.rows.length === 0) {
+            // Token not found in the database or expired, render an error page
+            return res.render('resetError.ejs', { error: 'Invalid or expired token' });
+        }
+
+        // Render the password reset form/page, passing the token as a hidden input field
+        res.render('changePass.ejs', { token });
+    } 
+    catch (error) {
+        console.error('Error verifying reset token:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 app.get("/final", (req, res) => {
     //For normal User
@@ -165,17 +277,39 @@ app.post("/verify", async (req, res) => {
 }
 });
 
-app.post("/change", async (req, res) => {
-    bcrypt.hash(req.body.Pass, saltRounds, async function (err, hash) {
-        try{
-            await db.query("Update Credentials set password=$1 where empid=EM-1",[hash])
+app.post("/change/:token", async (req, res) => {
+    const token = req.params.token;
+    const decodedToken = verifyResetToken(token);
+
+    if (!decodedToken || !decodedToken.userId) {
+        // If the token is invalid or doesn't contain the required information, render an error page
+        return res.render('resetError.ejs', { error: 'Invalid or expired token' });
+    }
+
+    const newPassword = req.body.Pass;
+
+    // Hash the new password
+    bcrypt.hash(newPassword, saltRounds, async function (err, hash) {
+        if (err) {
+            console.error('Error hashing password:', err);
+            // Render an error page if there's an issue with hashing the password
+            return res.render('resetError.ejs', { error: 'Internal Server Error' });
         }
-        catch(err){
-            console.log(err);
+        
+        try {
+            // Update the user's password in the database using the decoded token's userId
+            await db.query("UPDATE credentials SET password = $1 WHERE employeeid = $2", [hash, decodedToken.userId]);
+
+            // Redirect the user to a page indicating that their password has been successfully reset
+            res.redirect("/")
+        } catch (error) {
+            console.error('Error updating password:', error);
+            // Render an error page if there's an issue with updating the password in the database
+            res.render('resetError.ejs', { error: 'Internal Server Error' });
         }
     });
-    res.redirect("/");
 });
+
 
 app.post("/final", async (req, res) => {
     console.log(req.body);
@@ -312,3 +446,56 @@ app.get('/query/download', async (req, res) => {
 app.listen(port, ()=>{
     console.log(`port no : ${port}`);
 })
+
+
+
+
+
+// // Route to handle forgot password requests
+// app.post('/forgot', async (req, res) => {
+//     const { employeeID } = req.body;
+//     console.log(employeeID);
+
+//     try {
+//         const user = (await db.query('SELECT * FROM credentials WHERE employeeid = $1', [employeeID])).rows;
+
+//         if (user.length === 0) {
+//             // User not found, redirect back to the forgot password page with an error message
+//             res.render('forgetPass.ejs', { error: 'User not found' });
+//             return;
+//         }
+
+//         // Generate a reset token for the user
+//         const resetToken = generateResetToken(employeeID);
+
+//         // Save the reset token and its expiration time in your database (e.g., along with the user's record)
+
+//         // Send the reset token to the user via email or another method
+//         // Here, you can use a nodemailer library or any other email service to send an email containing the reset token
+
+//         // Redirect the user to a page informing them that an email with instructions for resetting their password has been sent
+//         res.render('resetInstructions.ejs', { message: 'An email with instructions for resetting your password has been sent' });
+//     } catch (error) {
+//         console.error('Error processing forgot password request:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+// // Route to handle password reset requests
+// app.post('/reset', async (req, res) => {
+//     const { token, newPassword } = req.body;
+
+//     // Verify the reset token provided by the user
+//     const decodedToken = verifyResetToken(token);
+
+//     if (!decodedToken || !decodedToken.employeeID) {
+//         // If the token is invalid or doesn't contain the required information, return an error response
+//         return res.status(400).send('Invalid or expired token');
+//     }
+
+//     // Proceed with updating the user's password in the database
+//     // Update the user's password using the decodedToken.employeeID and the newPassword provided by the user
+
+//     // Redirect the user to a page indicating that their password has been successfully reset
+//     res.render('passwordResetConfirmation.ejs', { message: 'Your password has been successfully reset' });
+// });
