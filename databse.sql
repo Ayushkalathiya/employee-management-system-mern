@@ -61,3 +61,11 @@ create table LeaveRequests(
 	Description text,
 	Foreign Key(EmployeeID) References Employees(EmployeeID)
 );
+
+create table ResetPass(
+	EmployeeID text,
+	ResetToken text,
+	Expiration timestamp,
+	-- Pachi View Table Ma jaine with time Zone KRi dejo Expiration Column ni properties ma jaine 
+	Foreign Key(EmployeeID) References Employees(EmployeeID)
+);
