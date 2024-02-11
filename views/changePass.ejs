@@ -1,68 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Password</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f0f0; /* Added background color */
+    }
+    .password-hints {
+      font-size: 0.8rem;
+      color: red;
+      margin-top: 5px;
+    }
+    .length-hint {
+      font-size: 0.8rem;
+      color: #777;
+    }
+    .card-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 250px); /* Adjusted height to accommodate heading */
+    }
+  </style>
 </head>
 <body>
-    <h1>Change Password</h1>
-    <form action="/change" method="POST">
-        <label for="Pass">New Password:</label>
-        <input type="password" id="Pass" name="Pass" required>
-        <label for="Confirm">Retype Password:</label>
-        <input type="hidden" id="Confirm" name="Confirm" required>
-        <br><br>
-        <button type="submit" id="submit">
-            Submit
-        </button>
-    </form>
-</body>
-<script>
+  <h1 class="text-center mt-5">Employee Management System</h1> <!-- Added heading outside of the card -->
+  <div class="card-container">
+    <div class="card" style="width: 400px;">
+      <div class="card-body">
+        <h3 class="card-title text-center">Change Password</h3>
+        <form action="/change" method="POST">
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <input type="password" class="form-control" id="Pass" name="Pass" required>
+            <div class="password-hints" id="password-hints">Minimum length is 8 characters</div>
+            <div class="length-hint" id="length-hint"></div>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm New Password</label>
+            <input type="password" class="form-control" id="Confirm" name="Confirm" disabled required>
+          </div>
+          <button type="submit" class="btn btn-dark btn-block" id="submit" disabled>Change Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
     var Pass = document.getElementById("Pass");
     var Confirm = document.getElementById("Confirm");
+    var passwordHints = document.getElementById("password-hints");
+    var lengthHint = document.getElementById("length-hint");
     let traps = document.getElementById("submit");
     let check;
 
-    Pass.addEventListener("keyup", function() {
+    Pass.addEventListener("input", function() {
         checkpassword(Pass.value);
     });
 
     function checkpassword(password) {
-        
-    var strength = 0;
-    if (password.match(/[a-z]+/)) {
-        strength += 1;
-    }
-    if (password.match(/[A-Z]+/)) {
-        strength += 1;
-    }
-    if (password.match(/[0-9]+/)) {
-        strength += 1;
-    }
-    if (password.match(/[$@#&!]+/)) {
-        strength += 1;
-    }
-    if (password.length > 8 && strength==4) {
-        check=password;
-        Confirm.type="password";
-    }
-    else{
-        Confirm.type="hidden";
+        var strength = 0;
+        if (password.match(/[a-z]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[A-Z]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[0-9]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[$@#&!]+/)) {
+            strength += 1;
+        }
+
+        var hints = [];
+        if (!password.match(/[a-z]+/)) {
+            hints.push("At least one lowercase letter");
+        }
+        if (!password.match(/[A-Z]+/)) {
+            hints.push("At least one uppercase letter");
+        }
+        if (!password.match(/[0-9]+/)) {
+            hints.push("At least one digit");
+        }
+        if (!password.match(/[$@#&!]+/)) {
+            hints.push("At least one special character ($@#&!)");
+        }
+
+        passwordHints.textContent = hints.join(", ");
+
+        if (password.length < 8) {
+            lengthHint.style.color = "red";
+            lengthHint.textContent = "Minimum length: 8 characters";
+        } else {
+            lengthHint.style.color = "#777";
+            lengthHint.textContent = "";
+        }
+
+        if (password.length > 7 && strength == 4) {
+            check = password;
+            Confirm.removeAttribute("disabled");
+            Confirm.type = "password";
+        } else {
+            Confirm.setAttribute("disabled", true);
+            Confirm.type = "hidden";
+            traps.disabled = true;
+        }
     }
 
-    Confirm.addEventListener("keyup", function() {
+    Confirm.addEventListener("input", function() {
         confirmpassword(Confirm.value);
     });
 
     function confirmpassword(confirm) {
-        if(check==confirm){
-            traps.disabled=false;
-        }
-        else{
-            traps.disabled=true;
+        if (check == confirm) {
+            traps.disabled = false;
+        } else {
+            traps.disabled = true;
         }
     }
-}
-</script>
+  </script>
+</body>
 </html>
