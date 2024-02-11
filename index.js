@@ -95,7 +95,7 @@ async function SendMailforReset(EmailID,Message,Subject){
         from: process.env.EMAIL,
         to: EmailID,
         subject: Subject,
-        html: Message
+        message: Message
     };
 
     transporter.sendMail(mailOptions, function(error, info){
@@ -137,7 +137,7 @@ app.post("/forgot", async (req, res) => {
     console.log("EMAIL")
     console.log(Email)
     const Subject = "PASSWORD RESET";
-    const html = `<p>Click <a href="http://localhost:3000/reset-password/`+resetToken+`>here</a> to reset your password.</p>`
+    const html = `Click "http://localhost:3000/reset-password/`+resetToken+`> here to reset your password.`
     SendMailforReset(Email[0].email,html,Subject);
     res.render("mailSent.ejs");
 });
