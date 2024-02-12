@@ -39,7 +39,8 @@ async function main(){
     catch(err){
         console.log(err);
     }
-} 
+}
+
 main();
 
 // Function to insert the token into the database
@@ -95,7 +96,7 @@ async function SendMailforReset(EmailID,Message,Subject){
         from: process.env.EMAIL,
         to: EmailID,
         subject: Subject,
-        message: Message
+        text: Message
     };
 
     transporter.sendMail(mailOptions, function(error, info){
@@ -131,14 +132,19 @@ app.post("/forgot", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
     // Generate a reset token for the user
-    const resetToken = generateResetToken(employeeID);
-    insertToken(employeeID, resetToken);
+    const resetToken = await generateResetToken(employeeID);
+    await insertToken(employeeID, resetToken);
     const Email = (await db.query('Select Email from Employees where EmployeeId = $1',[employeeID])).rows;
     console.log("EMAIL")
     console.log(Email)
     const Subject = "PASSWORD RESET";
     const html = `Click "http://localhost:3000/reset-password/`+resetToken+`> here to reset your password.`
-    SendMailforReset(Email[0].email,html,Subject);
+    try{
+        await SendMailforReset(Email[0].email,html,Subject);
+    }
+    catch (error){
+        console.log(error)
+    }
     res.render("mailSent.ejs");
 });
 
@@ -186,7 +192,7 @@ app.get("/NewEmp", (req, res) => {
 
 app.post("/register", async (req, res) => {
     console.log(req.body);
-    var check=[];
+    let check=[];
     const employeeName = req.body.employeeName;
     try{
         check = (await db.query("Select * from Credentials where EmpId = $1",[employeeName])).rows;
@@ -195,7 +201,6 @@ app.post("/register", async (req, res) => {
         //If user does not exists
         if (check.length == 0) {
             //await db.query("Insert into Credential values($1,'user',$2)",[employeeName,hash])
-            const name=employeeName;
             bcrypt.hash(name, saltRounds, async (err, hash)=> {
                 await db.query("Insert into Credentials values($1,$2)",[employeeName,hash])
             });
@@ -208,11 +213,11 @@ app.post("/register", async (req, res) => {
     }
 });
 
-var userName,OTP;
+let userName,OTP;
 
 app.post("/verify", async (req, res) => {
     
-    var check=[];
+    let check=[];
     userName = req.body.username;
     const password = req.body.password;
     console.log(userName+" "+password)
@@ -261,7 +266,7 @@ app.post("/verify", async (req, res) => {
                 }
                 if (result == true) {
                     if(finalRole=="admin"){
-                        otp();
+                        await otp();
                         res.render("otp.ejs",{OTP : OTP});
                     }else{
                         //Render the  normal user page
@@ -368,7 +373,7 @@ app.post("/emp/profile/add", async(req, res) => {
     const Dept_name = req.body.department;
     const finaldeptid = departments.find(dept => dept.deptname == Dept_name).DeptID;
     const Email = req.body.email;
-    const Mo_no = req.body.mobile;
+    // const Mo_no = req.body.mobile;
     let userRoleToBeAdded = roles.find(role => role.roleName == userRoleToBeAdded).roleID;
     // const country = req.body.country;
     // const Stat = req.body.state;
@@ -398,10 +403,11 @@ app.get("/query", (req, res) => {
 
 app.post("/query/add",async (req,res)=>{
     query=req.body.query;
+    let visible;
     if (query.trim() !== '') {
-        vissible=1;
-        const result=await db.query(query);
-        answer=result.rows;
+        visible = 1;
+        const result = await db.query(query);
+        answer = result.rows;
         console.log(answer);
         res.redirect("/query");
     } else {
@@ -418,14 +424,12 @@ app.get('/query/download', async (req, res) => {
     if(answer.length != 0) {
         try { 
             // Sample array of objects (You can replace this with your data)
-            let i=0;
             // Create a new workbook
             const workbook = new Workbook();
             const worksheet = workbook.addWorksheet('Data');
-            keys_headers=Object.keys(answer[0]);
+            let keys_headers=Object.keys(answer[0]);
             // Add headers
-            const columns = keys_headers.map(key => ({ header: key.charAt(0).toUpperCase() + key.slice(1), key, width: 15 }));
-            worksheet.columns = columns;
+            worksheet.columns = keys_headers.map(key => ({ header: key.charAt(0).toUpperCase() + key.slice(1), key, width: 15 }));
             // Add data
             worksheet.addRows(answer);
             
