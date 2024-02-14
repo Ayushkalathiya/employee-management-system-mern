@@ -162,7 +162,7 @@ app.get('/reset-password/:token', async (req, res) => {
 
     // Check if the token exists in the database and is not expired
     try {
-        await db.query('Delete * from resetPass where exipration < NOW()');
+        await db.query('Delete from resetPass where expiration < NOW()');
         const result = await db.query('SELECT * FROM resetPass WHERE resettoken = $1 AND expiration > NOW()', [token]);
         console.log(result.rows)
         if (result.rows.length === 0) {
@@ -304,7 +304,7 @@ app.post("/change/:token", async (req, res) => {
         try {
             // Update the user's password in the database using the decoded token's userId
             await db.query("UPDATE credentials SET password = $1 WHERE employeeid = $2", [hash, decodedToken.userId]);
-
+            await db.query("DELETE FROM resetpass where WHERE employeeid = $1",[decodedToken.userId])
             // Redirect the user to a page indicating that their password has been successfully reset
             res.redirect("/")
         } catch (error) {
