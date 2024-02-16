@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <link rel="stylesheet" href="styles/main.css" /> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>Document</title>
   <style>
   #query {
@@ -80,6 +81,30 @@ table,th, td {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Blue shadow effect; modify as needed */
 }
+
+        .export-options {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .export-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .export-option i {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+
+        .excel-option {
+            color: green;
+        }
+
+        .pdf-option {
+            color: red;
+        }
   </style>
 </head>
 <body>
@@ -109,45 +134,36 @@ table,th, td {
     <%}%>
   </table>
   </div>
-  <div class="center" id="download"><!--hidden class-->
-    <form action="/query/download" method="post">
+  <!-- <div class="center" id="download">
+    <form action="/query/download" method="get">
       <button type="submit" id="downloadBtn">Download</button>
    </form>
-  </div>
+  </div> -->
+  <button id="downloadBtn" class="center" onclick="toggleExportOptions()">Export</button>
+  <div class="export-options" id="exportOptions">
+    <div class="export-option excel-option">
+        <i class="fas fa-file-excel"></i>
+        <form action="/query/export/excel" method="get">
+            <button type="submit" class="export-option-button">Excel File</button>
+        </form>
+    </div>
+    <!-- <div class="export-option pdf-option">
+        <i class="fas fa-file-pdf"></i>
+        <form action="/query/export/pdf" method="get">
+            <button type="submit" class="export-option-button">PDF File</button>
+        </form>
+    </div> -->
   <%}%>
-   <!-- <script>
-    document.getElementById('myForm').addEventListener('submit', async function(event) {
-      event.preventDefault(); // Prevent default form submission behavior
-      
-      const inputValue = document.getElementById('query').value;
-
-      if (inputValue.trim() !== '') {
-          try {
-              // Submit form data to backend using fetch API or another method
-              // const response = await fetch('/add', {
-              //     method: 'POST',
-              //     // headers: {
-              //     //     'Content-Type': 'application/x-www-form-urlencoded',
-              //     // },
-              //     body: `inputText=${inputValue}`
-              // });
-              // Log server response
-
-              // Show the hidden divs
-               document.getElementById('table-id').classList.remove('hidden');
-               document.getElementById('download').classList.remove('hidden');
-
-              // Clear the input field
-              //document.getElementById('query').value = '';
-              
-          } catch (error) {
-              console.error('Error submitting form:', error);
-          }
-      } else {
-          alert('Please enter something in the input field.');
-      }
-  });
-
-  </script> -->
+  <script>
+    // JavaScript for toggling export options
+    function toggleExportOptions() {
+        var exportOptions = document.getElementById("exportOptions");
+        if (exportOptions.style.display === "none") {
+            exportOptions.style.display = "block";
+        } else {
+            exportOptions.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>
