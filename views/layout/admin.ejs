@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+    <title>Employee Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    
+    <header class="fixed-top">
+        <div class="admin-logo">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="welcome-text">
+            Welcome back, Admin
+        </div>
+    </header>
+
+    <nav class="mt-5">
+        <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/admin/profile"><i class="fas fa-building"></i> my profile</a>
+        <!-- <a href="#"><i class="fas fa-user-tie"></i> </a> -->
+        <a href="#"><i class="fas fa-money-bill-wave"></i> Salary histroy</a>
+        <a href="/admin/leave"><i class="fas fa-clipboard-list"></i> Leave application </a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="content">
+        <!-- for flash -->
+        <%- include("../includes/flash.ejs") %>
+        <!-- ejs-mate -->
+        <%- body -%>
+    </div>
+    
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous">
+    </script>
+    <!-- for validation in form -->
+    <script src="/js/script.js"></script>
+
+</body>
+</html>

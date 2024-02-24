@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+   rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f0f0; /* Added background color */
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      width: 400px;
+    }
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- success is Array -->
+<% if(success && success.length){ %>
+  <div class="alert alert-success alert-dismissible fade show mt-2 col-6 offset-3" role="alert">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+  
+  <!-- for error -->
+<% if(error && error.length){ %>
+  <div class="alert alert-danger alert-dismissible fade show mt-2 col-6 offset-3" role="alert">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title text-center">Forgot Password</h2>
+        <form id="forgotPasswordForm" action="/forgot" method="post">
+          <div class="form-group">
+            <label for="employeeID">Employee ID</label>
+            <input type="text" class="form-control" id="employeeID" name="employeeID" required>
+            <% if (locals.error) { %>
+              <div class="error-message" id="errorMessage"> <%= error %> </div> 
+            <% } %>
+          </div>
+          <button type="submit" class="btn btn-dark btn-block">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const employeeIDInput = document.getElementById('employeeID');
+      const errorMessage = document.getElementById('errorMessage');
+
+      // Add event listener to input box
+      employeeIDInput.addEventListener('input', function() {
+        errorMessage.textContent = ''; // Clear error message
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" href="styles/main.css" /> -->
+  <title>Document</title>
+  <style>
+  #query {
+  margin-left: 300px;
+  text-align: left;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 200;
+  width: 40%;
+}
+
+#query:focus {
+  outline: none;
+  box-shadow: inset 0 -3px 0 0 black;
+}
+
+#query_Submit{
+  margin-left: 100px;
+  height: 40px;
+  top: 10px;
+  width: 100px;
+  border-radius: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+}
+div{
+  margin-bottom: 100px;
+}
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+.hidden {
+  display: none;
+}
+table,th, td {
+  border: 2px solid black;
+}
+
+#downloadBtn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #007bff; /* Blue color; modify as needed */
+  color: #fff; /* White text color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+
+/* Hover effect */
+#downloadBtn:hover {
+  background-color: #0056b3; /* Darker blue color; modify as needed */
+}
+
+/* Active effect */
+#downloadBtn:active {
+  background-color: #004799; /* Even darker blue color; modify as needed */
+}
+
+/* Focus effect */
+#downloadBtn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Blue shadow effect; modify as needed */
+}
+  </style>
+</head>
+<body>
+  <div>
+  <form  action="/query/add" method="post" id="myForm">
+    <input type="text" id="query" name="query" placeholder="Enter the query" autocomplete="off" autofocus="true" required>
+    <button class="add" type="submit" name="list" id="query_Submit">Submit</button>
+  </form>
+  </div>
+  <%if(answer.length!=0){%>
+  <div class="center" id="table-id" ><!--hidden class-->
+  <table>
+    <%let i=0;%>
+    <%for(let object of answer){%>
+      <%if(i==0){i=1;%>
+      <tr>
+        <%for(let key in object){%>
+        <th><%=key%></th>
+        <%}%>
+      </tr>
+      <%}%>
+      <tr>
+        <%for(let key in object){%>
+        <td><%=object[key]%></td>
+        <%}%>
+      </tr>
+    <%}%>
+  </table>
+  </div>
+  <div class="center" id="download"><!--hidden class-->
+    <form action="/query/download" method="post">
+      <button type="submit" id="downloadBtn">Download</button>
+   </form>
+  </div>
+  <%}%>
+   <!-- <script>
+    document.getElementById('myForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Prevent default form submission behavior
+      
+      const inputValue = document.getElementById('query').value;
+
+      if (inputValue.trim() !== '') {
+          try {
+              // Submit form data to backend using fetch API or another method
+              // const response = await fetch('/add', {
+              //     method: 'POST',
+              //     // headers: {
+              //     //     'Content-Type': 'application/x-www-form-urlencoded',
+              //     // },
+              //     body: `inputText=${inputValue}`
+              // });
+              // Log server response
+
+              // Show the hidden divs
+               document.getElementById('table-id').classList.remove('hidden');
+               document.getElementById('download').classList.remove('hidden');
+
+              // Clear the input field
+              //document.getElementById('query').value = '';
+              
+          } catch (error) {
+              console.error('Error submitting form:', error);
+          }
+      } else {
+          alert('Please enter something in the input field.');
+      }
+  });
+
+  </script> -->
+</body>
+</html>

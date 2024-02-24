@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home - Employee Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Adjustments */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 70px;
+        }
+
+        .sidebar a {
+            padding: 10px;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="#"><i class="fas fa-building"></i> Department</a>
+        <a href="#"><i class="fas fa-users"></i> Employee</a>
+        <a href="#"><i class="fas fa-money-bill-wave"></i> Salary</a>
+        <a href="#"><i class="fas fa-clipboard-list"></i> Leave Request</a>
+    </div>
+
+    <!-- Page content -->
+    <div class="main-content">
+        <!-- Header -->
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="navbar-brand">
+                <i class="fas fa-user-cog mr-2"></i> Admin
+            </div>
+            <span class="navbar-text ml-auto">Welcome, Admin</span>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mt-4">
+            <h2>Welcome to Admin Dashboard</h2>
+            <!-- Add your main content here -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Employee Management System</title>
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <header class="fixed-top">
+        <div class="admin-logo">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="welcome-text">
+            Welcome back, <%= id  %>
+        </div>
+    </header>
+
+    <nav class="mt-5">
+        <a href="/emp/<%= id  %>"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/emp/<%= id  %>/profile"><i class="fas fa-building"></i> my profile</a>
+        <!-- <a href="#"><i class="fas fa-user-tie"></i> </a> -->
+        <a href="#"><i class="fas fa-money-bill-wave"></i> Salary histroy</a>
+        <a href="/emp/<%= id %>/leave"><i class="fas fa-clipboard-list"></i> Leave </a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="content">
+        <!-- Content goes here -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Add your JavaScript code here, if needed
+    </script>
+
+</body>
+</html>

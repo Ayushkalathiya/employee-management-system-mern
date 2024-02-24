@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Request</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Leave Request</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Sr. No.</th>
+          <th scope="col">Emp ID</th>
+          <th scope="col">Leave Type</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col">Posting Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example leave request entry -->
+        <tr>
+          <th scope="row">1</th>
+          <td>EMP001</td>
+          <td>Vacation</td>
+          <td>2024-02-15</td>
+          <td>2024-02-20</td>
+          <td>2024-02-11</td>
+          <td>Pending</td>
+          <td>
+            <button type="button" class="btn btn-success">Accept</button>
+            <button type="button" class="btn btn-danger">Reject</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#viewDetailsModal">View Details</button>
+          </td>
+        </tr>
+        <!-- More leave request entries can be added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- View Details Modal -->
+  <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewDetailsModalLabel">Leave Request Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Leave request details go here -->
+          <p>Employee ID: EMP001</p>
+          <p>Leave Type: Vacation</p>
+          <p>From: 2024-02-15</p>
+          <p>To: 2024-02-20</p>
+          <p>Posting Date: 2024-02-11</p>
+          <p>Status: Pending</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (optional) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

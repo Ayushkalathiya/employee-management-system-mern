@@ -1,0 +1,40 @@
+<!-- using ejs-mate -->
+<% layout("./layout/admin") %>
+<div class="container mt-3">
+    <h1 class="text-center mb-4 fw-bolder">Leave Request</h1>
+
+    <% for(let leave of allreq) { %>
+    <div class="card">
+      <div class="card-header">
+        <b>Leave Request of Employee ID:<%= leave.employeeid  %></b>
+      </div>
+      <div class="card-body">
+        <p class="card-title"><b>Leave Type: </b> <%= leave.leavetype %></p>
+        <p class="card-text"><b>From Date : </b><%= leave.startdate.toDateString() %></p>
+        <p class="card-text"><b>To Date: </b><%= leave.enddate.toDateString() %> </p>
+        <p class="card-text"><b>Posting Date: </b><%= leave. applieddate.toDateString() %></p>
+        <p class="card-text"><b>Description: </b><%= leave.description %> </p>
+        <p class="card-text"><b>status: </b><%= leave.status %></p>
+
+        <div class="row">
+          <div class="col-1">
+            <!-- approve leave request -->
+            <form method="POST" action="/admin/leave/approve/<%= leave.leaverequestid %>">
+              <button type="submit" class="btn btn-success mr-2">Accept</button>
+            </form>
+          </div>
+          
+          <div class="col-3">
+            <!-- reject leave request -->
+            <form method="POST" action="/admin/leave/reject/<%= leave.leaverequestid%>">
+              <button type="submit" class="btn btn-danger ms-2">Reject</button>
+            </form>
+          </div>
+          
+        </div>
+        
+      
+      </div>
+    <% } %>  
+    </div>
+</div>

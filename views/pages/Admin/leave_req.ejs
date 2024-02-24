@@ -1,0 +1,53 @@
+<!-- using ejs-mate -->
+<% layout("./layout/admin") %>
+<div class="container mt-5 ms-1">
+  <h2 class="text-center mb-4 fw-bolder">Leave Request</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Sr. No.</th>
+        <th scope="col">Emp ID</th>
+        <th scope="col">Leave Type</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+        <th scope="col">Posting Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+      
+    <tbody>
+      <% let n=1 %>  
+      <tr>
+        <% for (let leave of allreq) {%>
+        <th scope="row"><%= n  %></th>
+        <td><%= leave.employeeid %></td>
+        <td><%= leave.leavetype %></td>
+        <td><%= leave.startdate.toDateString() %></td>
+        <td><%= leave.enddate.toDateString() %></td>
+        <td><%= leave.enddate.toDateString() %></td>
+        <td><%= leave.status %></td>
+        <td class="d-flex flex-nowrap bd-highlight">
+          <!-- view leave  -->
+          <form method="GET" action="/admin/leave/view/<%= leave.leaverequestid %>">  
+            <button type="submit" class="btn btn-primary ms-2">
+              View Details
+            </button>
+          </form>
+            
+            <!-- approve leave -->
+          <form method="POST"  action="/admin/leave/approve/<%= leave.leaverequestid %>"> 
+            <button type="submit" class="btn btn-success ms-2">Accept</button>  
+          </form>
+            
+            <!-- reject leave -->
+          <form method="POST" action="/admin/leave/reject/<%= leave.leaverequestid %>">
+            <button type="submit" class="btn btn-danger ms-2">Reject</button>
+          </form>
+        </td>
+        <% n++ %>
+      </tr>
+      <% } %>
+    </tbody>
+    </table>
+</div>
