@@ -103,7 +103,7 @@ async function SendMailforReset(EmailID,Message,Subject){
         if (error) {
             console.log(error);
         } else {
-            req.flash("succes","check your register gmail")
+            req.flash("success","Check your Registered Email account")
             console.log('Email sent: ' + info.response);
         }
     });
@@ -159,7 +159,7 @@ module.exports.forgotpass = async (req, res) => {
         const user = (await db.query("SELECT * FROM credentials WHERE employeeid = $1", [employeeID])).rows;
         if (user.length === 0) {
             // User not found, redirect back to the forgot password page with an error message
-            req.flash("error","User not found please enter valid information");
+            req.flash("error","User not found please Enter Valid Information");
             res.render("./pages/forgetPass.ejs", { error: "User not found" });
             return;
         }
@@ -255,7 +255,7 @@ module.exports.verify =  async (req, res) => {
     
     //If user does not exists
     if (check.length === 0) {
-        req.flash("error","username does not exist");
+        req.flash("error","Username does not exist");
         res.redirect("/");
         console.log("User does not exist");
     } 
@@ -267,7 +267,7 @@ module.exports.verify =  async (req, res) => {
                     res.render("./pages/changePass.ejs");
                     console.log("password Changed");
                 }else{
-                    req.flash("error","invalid")
+                    req.flash("error","Invalid")
                     res.redirect("/");
                     console.log("redirect at login page");
                 }
@@ -292,16 +292,16 @@ module.exports.verify =  async (req, res) => {
                 if (result === true) {
                     if(finalRole.toLowerCase() == "admin"){
                         otp();
-                        req.flash("success","opt send successfully");
+                        req.flash("success","OTP sent successfully");
                         res.render("./pages/otp.ejs",{OTP : OTP});
                     }else{
                         //Render the  normal user page
-                        req.flash("success","welcom back...");
+                        req.flash("success","Welcome Back...");
                         res.redirect(`./emp/${user}`);
                     }
                 }
                 else{
-                    req.flash("error","username or password incorrect");
+                    req.flash("error","Username or Password Incorrect");
                     res.redirect("/");
                     console.log("login page");
                 } 
@@ -355,7 +355,7 @@ module.exports.finallogin = async (req, res) => {
         req.flash("success","welcome back...");
         res.render("./pages/Admin/admin.ejs");
     }else{
-        req.flash("error","incorrect otp please try again...");
+        req.flash("error","Incorrect OTP Please Try Again...");
         res.render("./pages/otp.ejs");
     }
 };
