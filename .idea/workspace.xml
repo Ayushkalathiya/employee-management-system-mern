@@ -6,19 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8eae5f45-b907-4034-a8d7-f77fdfa7662e" name="Changes" comment="Minor Changes and Code fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/admin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/employee.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/employee.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/includes/flash.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/includes/flash.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/layout/admin.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout/admin.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout/employee.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout/employee.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/pages/Admin/NewEmp.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/pages/Admin/NewEmp.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/pages/Employee/dashboard.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/pages/Employee/dashboard.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/pages/Employee/employee.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/pages/Employee/employee.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/pages/otp.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/pages/otp.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +49,7 @@
   "keyToString": {
     "Node.js.admin.js.executor": "Run",
     "Node.js.index.js.executor": "Run",
+    "Node.js.login.js.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -85,7 +75,7 @@
       <workItem from="1707906796161" duration="523000" />
       <workItem from="1708054560309" duration="26000" />
       <workItem from="1708061306958" duration="589000" />
-      <workItem from="1709033748700" duration="11456000" />
+      <workItem from="1709033748700" duration="12860000" />
     </task>
     <task id="LOCAL-00001" summary="Minor Changes and Code fixes">
       <option name="closed" value="true" />
