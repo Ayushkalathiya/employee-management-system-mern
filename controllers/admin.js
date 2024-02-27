@@ -10,7 +10,7 @@ db.connect();
 
 // render All Employee Leave
 module.exports.renderAllLeave = async(req, res)=>{
-    let leave =  await db.query("SELECT * FROM leaverequests ORDER BY CASE status WHEN 'pending' THEN 1 WHEN 'approve' THEN 2 WHEN 'reject' THEN 3 ELSE 4 END");
+    let leave =  await db.query("SELECT * FROM leaverequests ORDER BY CASE status WHEN 'Pending' THEN 1 WHEN 'Approve' THEN 2 WHEN 'Reject' THEN 3 ELSE 4 END");
     console.log(leave.rows);
     let allreq = [];
     leave.rows.forEach((row)=>{
@@ -41,7 +41,7 @@ module.exports.approveLeave = async(req,res)=>{
     let leaveid = req.params.id;
     console.log(leaveid);
 
-    let leave =  await db.query("Update leaverequests set status='approve' where leaverequestid=$1",[leaveid]);
+    let leave =  await db.query("Update leaverequests set status='Approve' where leaverequestid=$1",[leaveid]);
     console.log(leave.rows);
     res.redirect("/admin/leave");
 };
@@ -50,7 +50,7 @@ module.exports.approveLeave = async(req,res)=>{
 module.exports.rejectLeave = async(req,res)=>{
     console.log("Reject :");
     let leaveid = req.params.id;
-    let leave =  await db.query("Update leaverequests set status='reject' where leaverequestid=$1",[leaveid]);
+    let leave =  await db.query("Update leaverequests set status='Reject' where leaverequestid=$1",[leaveid]);
     console.log(leave.rows);
     res.redirect("/admin/leave");
 };
