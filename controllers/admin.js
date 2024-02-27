@@ -54,3 +54,4 @@ module.exports.rejectLeave = async(req,res)=>{
     console.log(leave.rows);
     res.redirect("/admin/leave");
 };
+

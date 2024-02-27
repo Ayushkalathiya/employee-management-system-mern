@@ -69,16 +69,16 @@ app.get('/logout', (req, res) => {
 });
 
 // if page is not available
-// app.all("*", (req, res, next) => {
-//     console.log("into not found in index.js");
-//     next(new ExpressError(404, "Page Not Found"));
-// });
+app.all("*", (req, res, next) => {
+    console.log("into not found in index.js");
+    next(new ExpressError(404, "Page Not Found"));
+});
 
 
-// app.use((err, req, res, next) => {
-//     let { statusCode = 500, message = "Somthing went wrong" } = err;
-//     res.status(statusCode).render("./pages/Error.ejs", { err });
-// });
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Somthing went wrong" } = err;
+    res.status(statusCode).render("./pages/Error.ejs", { err });
+});
 
 app.listen(3000, () => {
     console.log(`port no : 3000`);
