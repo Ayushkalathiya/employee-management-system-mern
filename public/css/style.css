@@ -23,11 +23,12 @@ margin-left: 10px;
 }
 
 nav {
-width: 200px;
+width: 200px !important;
 background-color: #f4f4f4;
-padding-top: 20px;
-height: 100vh;
-position: fixed;
+padding-top: 20px !important;
+height: 100vh !important;
+position: fixed !important;
+margin-top: 0.05rem !important;
 }
 
 nav a {
@@ -55,3 +56,6 @@ margin-left: 220px;
 padding: 20px;
 }
 
+.show{
+    margin-top: 4rem !important;
+}

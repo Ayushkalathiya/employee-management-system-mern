@@ -26,7 +26,19 @@ router.post(
 router.post(
     "/leave/reject/:id" , 
     wrapAsync(adminController.rejectLeave)
-);  
+);
+
+router.get(
+    "/addEmp",
+    wrapAsync(adminController.addEmployeePage)
+);
+
+router.post(
+    "/add",
+    wrapAsync(adminController.addEmployee)
+);
+
+
 
 
 module.exports = router;

@@ -171,7 +171,7 @@ module.exports.forgotpass = async (req, res) => {
     // Generate a reset token for the user
     const resetToken = await generateResetToken(employeeID);
     console.log( "inside forgot pass : " , resetToken);
-    insertToken(employeeID, resetToken);
+    await insertToken(employeeID, resetToken);
     const Email = (await db.query('Select Email from Employees where EmployeeId = $1',[employeeID])).rows;
     console.log("EMAIL")
     console.log(Email)
@@ -221,7 +221,7 @@ module.exports.register = async (req, res) => {
     try{
         check = (await db.query("Select * from Credentials where EmpId = $1",[employeeName])).rows;
         console.log(check);
-        
+
         //If user does not exists
         if (check.length == 0) {
             //await db.query("Insert into Credential values($1,'user',$2)",[employeeName,hash])
@@ -262,9 +262,11 @@ module.exports.verify =  async (req, res) => {
     else {
         //if login for  1st time
         if(userName === password){
-            bcrypt.compare(userName, check[0].password, function (err, result){
+            bcrypt.compare(userName, check[0].password, async function  (err, result){
                 if (result===true) {
-                    res.render("./pages/changePass.ejs");
+                    let token = await generateResetToken(userName);
+                    await insertToken(userName, token);
+                    res.redirect(`reset-password/`+token)
                     console.log("password Changed");
                 }else{
                     req.flash("error","Invalid")

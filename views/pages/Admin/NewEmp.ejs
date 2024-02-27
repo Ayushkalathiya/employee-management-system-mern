@@ -1,33 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Details</title>
+<% layout("./layout/admin") %>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1em;
-        }
-
-        section {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+/*<!--        section {*/
+/*<!--            max-width: 600px;*/
+/*<!--            margin: 20px auto;*/
+/*<!--            background-color: #fff;*/
+/*<!--            padding: 20px;*/
+/*<!--            border-radius: 8px;*/
+/*<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*           }*/
 
         label {
             display: block;
@@ -55,52 +36,86 @@
             background-color: #555;
         }
     </style>
-</head>
+<div class="container mt-5 ms-1">
+    <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
+    <form action="/admin/add" method="POST">
+        <section style="margin-top: 20px;">
+            <label for="employeeID">Employee ID:</label>
+            <input
+                    type="text"
+                    id="employeeID"
+                    name="employeeID"
+                    placeholder="Enter Employee ID"
+                    required
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+            >
+            <label for="employeeFName">Employee First Name:</label>
+            <input
+                    type="text"
+                    id="employeeFName"
+                    name="employeeFName"
+                    placeholder="Enter First name"
+                    required
+                    style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px; margin-bottom: 1rem;"
+            >
+            <label for="employeeLName">Employee Last Name:</label>
+            <input
+                    type="text"
+                    id="employeeLName"
+                    name="employeeLName"
+                    placeholder="Enter Last name"
+                    required
+                    style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+            >
+            <br>
 
-<body>
-    <header>
-        <h1>Employee Details</h1>
-    </header>
-    <form action="/register" method="POST">
-    <section>
-        <label for="employeeName">Employee Name:</label>
-        <input 
-        type="text" 
-        id="employeeName" 
-        name="employeeName" 
-        placeholder="Enter name"
-        required
-        >
+            <label for="employeePosition">Position:</label>
+            <input
+                    type="text"
+                    id="employeePosition"
+                    name="employeePosition"
+                    placeholder="Enter position"
+                    required
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+            >
 
-        <label for="employeePosition">Position:</label>
-        <input 
-        type="text" 
-        id="employeePosition" 
-        name="employeePosition" 
-        placeholder="Enter position"
-        required
-        >
+            <label for="employeeEmail">Email ID:</label>
+            <input
+                    type="Email"
+                    id="employeeEmail"
+                    name="employeeEmail"
+                    placeholder="Enter Employee Email ID"
+                    required
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+            >
 
-        <label for="employeeDepartment">Department:</label>
-        <input 
-        type="text" 
-        id="employeeDepartment" 
-        name="employeeDepartment" 
-        placeholder="Enter department"
-        required
-        >
+            <label for="employeeDepartment">Department:</label>
+            <select id="employeeDepartment" name="employeeDepartment" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
+                <option value="">Select Department</option>
+                <%for (let d of Dept) {%>
+                <option value=<%=d.deptname %>> <%=d.deptname %> </option>
+                <% } %>
+            </select>
 
-        <!-- <label for="employeeSalary">Salary:</label>
-        <input 
-        type="text" 
-        id="employeeSalary" 
-        name="employeeSalary" 
-        placeholder="Enter salary">
-         -->
-         
-        <button type="submit">Add Employee</button>
-    </section>
-</form>
-</body>
+            <label for="employeeRole">Role:</label>
+            <select id="employeeRole" name="employeeRole" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
+                <option value="">Select Role</option>
+                <%for (let r of Role) {%>
+                <option value=<%=r.rolename %>> <%=r.rolename %> </option>
+                <% } %>
+            </select>
 
-</html>
+            <label for="employeeSal">Salary:</label>
+            <input
+                    type="number"
+                    id="employeeSal"
+                    name="employeeSal"
+                    placeholder="Enter Employee Salary"
+                    required
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+            >
+            <button type="submit" style="background-color: black; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">Add Employee</button>
+        </section>
+    </form>
+</div>
+
