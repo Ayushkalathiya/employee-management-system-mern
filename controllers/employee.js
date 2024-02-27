@@ -1,16 +1,15 @@
 const pg = require("pg");
 const db = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: process.env.DBNAME,
-    password: process.env.DBPASS,
-    port: 5432,
+    user:  "postgres",
+    host:  "localhost",
+    database:  process.env.DBNAME,
+    password:  process.env.DBPASS,
+    port:  5432,
 });
 db.connect();
 
 module.exports.dashboard = async (req, res) => {
     id = req.params.id;
-    console.log("into employee route" , id);
     console.log("into empoyee route", id);
 
     // let leave =  await db.query("Select *from leaverequests where employeeid=$1",[id]);
@@ -34,12 +33,11 @@ module.exports.renderProfile = async (req, res) => {
 
 module.exports.renderLeaveApp = async (req, res) => {
     let id = req.params.id;
-    console.log("REnder leave id : " ,id);
-    res.render("./pages/Employee/leave.ejs", { id });
+    res.render("./pages/Employee/leave.ejs",{id});
 };
 
-module.exports.createLeave = async (req, res) => {
-
+module.exports.createLeave = async(req,res)=>{
+    
     // Today date
     let today = new Date().toISOString();
     today = today.substring(0,10);
@@ -76,6 +74,33 @@ module.exports.createLeave = async (req, res) => {
     }
 
 
+    console.log( "createLeave : " + userId);
+
+     // Validate dates
+     if (req.body.fromDate > req.body.toDate) {
+        req.flash("error", "Start date cannot be after end date");
+        console.log("Start date cannot be after end date");
+        return res.redirect(`/emp/${userId}/leave`);
+    }
+    if (req.body.fromDate < today) {
+        req.flash("error", "Start date cannot be in the past");
+        console.log("Start date cannot be in the past");
+        return res.redirect(`/emp/${userId}/leave`);
+    }
+  
+
+    // Check if leave request already exists 
+    const existingLeave = await db.query("SELECT * FROM leaverequests WHERE EmployeeID = $1 AND StartDate >= $2 AND EndDate <= $3", [userId, req.body.fromDate, req.body.toDate]);
+
+    console.log();
+
+    if (existingLeave.rowCount > 0) {
+        req.flash("error", "Leave request already exists for this date range");
+        console.log("Leave request already exists for this date range");
+        return res.redirect(`/emp/${userId}/leave`);
+    }
+
+
     console.log(req.body);
     await db.query("Insert into leaverequests(EmployeeID,LeaveType,StartDate,EndDate,Status,Description,applieddate) values($1,$2,$3,$4,$5,$6,$7)",
         [userId, req.body.leaveType, req.body.fromDate, req.body.toDate, "Pending", req.body.description, today]);
@@ -84,12 +109,8 @@ module.exports.createLeave = async (req, res) => {
     res.redirect(`/emp/${userId}`);
 };
 
-
-// module.exports.addProfile =  async(req, res) => {
-    // get all from data of Employee
-
-module.exports.addProfile = async (req, res) => {
-    // get all from data of Employee
+module.exports.addProfile =  async(req, res) => {
+    // get all from data of Emplyoee
     const Emp_id = req.body.employeeId;
     const F_name = req.body.firstName;
     const L_name = req.body.lastName;
