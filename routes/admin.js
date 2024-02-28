@@ -40,6 +40,27 @@ router.post(
 
 
 
+router.get(
+    "/query",
+    wrapAsync(adminController.queryPage)
+);
+
+router.post(
+    "/query/add",
+    wrapAsync(adminController.queryAdd)
+)
+
+router.get(
+    "/query/export/excel",
+    wrapAsync(adminController.queryExportExcel)
+)
+
+// router.get(
+//     "/query/export/pdf",
+//     wrapAsync(adminController.queryExportPdf)
+// )
+
+
 
 
 

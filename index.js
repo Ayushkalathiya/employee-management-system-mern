@@ -7,6 +7,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+const { Workbook } = require('exceljs');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const PDFDocument = require('pdfkit');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
