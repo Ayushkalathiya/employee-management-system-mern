@@ -1,6 +1,6 @@
 <% layout("./layout/admin") %>
   <div class="sarthakquerypage">
-  <form  action="/admin/query/add" method="post" id="myForm">
+  <form  action="/admin/<%= id %>/query/add" method="post" id="myForm">
     <input type="text" id="query" name="query" placeholder="Enter the query" autocomplete="off" autofocus="true" required>
     <button class="add" type="submit" name="list" id="query_Submit">Submit</button>
   </form>
@@ -26,7 +26,7 @@
   </table>
   </div>
   <div class="center" id="download"><!--hidden class-->
-    <form action="/admin/query/export/excel" method="get">
+    <form action="/admin/<%= id %>/query/export/excel" method="get">
       <button type="submit" id="downloadBtn">Download</button>
    </form>
   </div>

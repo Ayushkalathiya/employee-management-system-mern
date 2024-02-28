@@ -136,3 +136,41 @@ padding: 20px;
     outline: none;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Blue shadow effect; modify as needed */
   }
+
+  /* newEmployee page */
+
+  /*<!--        section {*/
+/*<!--            max-width: 600px;*/
+/*<!--            margin: 20px auto;*/
+/*<!--            background-color: #fff;*/
+/*<!--            padding: 20px;*/
+/*<!--            border-radius: 8px;*/
+/*<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*           }*/
+
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}

@@ -136,4 +136,4 @@ module.exports.addProfile =  async(req, res) => {
         console.log(err);
     }
 
-}
+};

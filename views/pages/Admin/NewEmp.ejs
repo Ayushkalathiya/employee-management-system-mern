@@ -1,44 +1,8 @@
 <% layout("./layout/admin") %>
-    <style>
-
-/*<!--        section {*/
-/*<!--            max-width: 600px;*/
-/*<!--            margin: 20px auto;*/
-/*<!--            background-color: #fff;*/
-/*<!--            padding: 20px;*/
-/*<!--            border-radius: 8px;*/
-/*<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
-/*           }*/
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-    </style>
+   
 <div class="container mt-5 ms-1">
     <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
-    <form action="/admin/add" method="POST">
+    <form action="/admin/<%= id %>/addEmp" method="POST">
         <section style="margin-top: 20px;">
             <label for="employeeID">Employee ID:</label>
             <input

@@ -1,6 +1,6 @@
 <!-- using ejs-mate -->
 <% layout("./layout/admin") %>
-<div class="container mt-3">
+<div class="container mt-5">
     <h1 class="text-center mb-4 fw-bolder">Leave Request</h1>
 
     <% for(let leave of allreq) { %>
@@ -16,24 +16,26 @@
         <p class="card-text"><b>Description: </b><%= leave.description %> </p>
         <p class="card-text"><b>status: </b><%= leave.status %></p>
 
+        <%if(leave.status == "Pending"){%>
+
         <div class="row">
           <div class="col-1">
             <!-- approve leave request -->
-            <form method="POST" action="/admin/leave/approve/<%= leave.leaverequestid %>">
+            <form method="POST" action="/admin/<%= id  %>/leave/approve/<%= leave.leaverequestid %>">
               <button type="submit" class="btn btn-success mr-2">Accept</button>
             </form>
           </div>
           
           <div class="col-3">
             <!-- reject leave request -->
-            <form method="POST" action="/admin/leave/reject/<%= leave.leaverequestid%>">
+            <form method="POST" action="/admin/<%= id  %>/leave/reject/<%= leave.leaverequestid%>">
               <button type="submit" class="btn btn-danger ms-2">Reject</button>
             </form>
           </div>
           
         </div>
         
-      
+        <% } %>
       </div>
     <% } %>  
     </div>

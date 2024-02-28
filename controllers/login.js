@@ -355,7 +355,8 @@ module.exports.finallogin = async (req, res) => {
         //Render the Admin Page
         finalRole="admin";
         req.flash("success","welcome back...");
-        res.render("./pages/Admin/admin.ejs");
+        console.log(userName);
+        res.render("./pages/Admin/admin.ejs",{id : userName});
     }else{
         req.flash("error","Incorrect OTP Please Try Again...");
         res.render("./pages/otp.ejs");

@@ -15,6 +15,7 @@ db.connect();
 
 // render All Employee Leave
 module.exports.renderAllLeave = async(req, res)=>{
+    let id = req.params.id;
     let leave =  await db.query("SELECT * FROM leaverequests ORDER BY CASE status WHEN 'Pending' THEN 1 WHEN 'Approve' THEN 2 WHEN 'Reject' THEN 3 ELSE 4 END");
     console.log(leave.rows);
     let allreq = [];
@@ -22,13 +23,13 @@ module.exports.renderAllLeave = async(req, res)=>{
         allreq.push(row);
     });
     console.log(allreq);
-    res.render("./pages/admin/leave_req.ejs",{allreq});
+    res.render("./pages/admin/leave_req.ejs",{allreq,id});
 };
 
 // view Employee one leave
 module.exports.viewLeave = async(req, res)=>{
-    let leaveid = req.params.id;
-
+    let leaveid = req.params.leaveid;
+    let id = req.params.id;
     let leave =  await db.query("Select *from leaverequests where leaverequestid=$1 ",[leaveid]);
     console.log(leave.rows);
     let allreq = [];
@@ -36,41 +37,45 @@ module.exports.viewLeave = async(req, res)=>{
         allreq.push(row);
     });
     console.log("View Request : ", allreq);
-    res.render("./pages/admin/view_leave.ejs",{allreq});
+    res.render("./pages/admin/view_leave.ejs",{allreq,id});
 };
 
 
 // Approve leave
 module.exports.approveLeave = async(req,res)=>{
+    let id = req.params.id;
     console.log("Approve :");
-    let leaveid = req.params.id;
+    let leaveid = req.params.leaveid;
     console.log(leaveid);
 
     let leave =  await db.query("Update leaverequests set status='Approve' where leaverequestid=$1",[leaveid]);
     console.log(leave.rows);
-    res.redirect("/admin/leave");
+    res.redirect(`/admin/${id}/leave`);
 };
 
 // reject leave
 module.exports.rejectLeave = async(req,res)=>{
+    let id = req.params.id;
     console.log("Reject :");
-    let leaveid = req.params.id;
+    let leaveid = req.params.leaveid;
     let leave =  await db.query("Update leaverequests set status='Reject' where leaverequestid=$1",[leaveid]);
     console.log(leave.rows);
-    res.redirect("/admin/leave");
+    res.redirect(`/admin/${id}/leave`);
 };
 
 
 module.exports.addEmployeePage = async(req, res)=>{
+    let id = req.params.id;
     let Role = await db.query("SELECT INITCAP(rolename) As rolename from roles");
     let Dept = await db.query("SELECT INITCAP(deptname) As deptname from departments");
     let Deptartments = Dept.rows;
     let roles = Role.rows;
     console.log(roles)
-    res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments});
+    res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id});
 };
 
 module.exports.addEmployee = async(req, res)=>{
+    let id = req.params.id;
     console.log(req.body)
 
     let EmpID = req.body.employeeID;
@@ -85,6 +90,8 @@ module.exports.addEmployee = async(req, res)=>{
     let deptID;
     if(dept.length==0){
         deptID=null;
+        console.log("invalid department");
+        res.redirect(`/admin/${id}/addEmp`);
     }else{
         deptID = dept[0].deptid ;
     }
@@ -106,7 +113,7 @@ module.exports.addEmployee = async(req, res)=>{
     bcrypt.hash(EmpID, saltRounds, async (err, hash)=> {
         await db.query("Insert into Credentials values($1,$2)",[EmpID,hash])
     });
-    res.redirect("/admin/addEmp")
+    res.redirect(`/admin/${id}/leave`);
 };
 
 
@@ -115,7 +122,8 @@ let query;
 let answer=[];
 
 module.exports.queryPage=(req,res)=>{
-    res.render("./pages/admin/query.ejs",{answer:answer});
+    let id = req.params.id;
+    res.render("./pages/admin/query.ejs",{answer:answer,id});
 };
 
 const genAI = new GoogleGenerativeAI(process.env.GoogleGenerativeAI);
@@ -135,6 +143,7 @@ async function run(prompt) {
 }
 
 module.exports.queryAdd=async (req,res)=>{
+    let id = req.params.id;
     query=req.body.query.trim();
     if (query!== '') {
         visible = 1;
@@ -144,7 +153,7 @@ module.exports.queryAdd=async (req,res)=>{
             result = await db.query(generatedResponse);
         }catch(err){
             console.log(err);
-            res.status(500).redirect('/query');
+            res.status(500).redirect(`/admin/${id}/query`);
         }
         answer = result.rows;
         console.log(answer);
@@ -152,10 +161,11 @@ module.exports.queryAdd=async (req,res)=>{
         console.log('Please enter something in the input field.');
     }
     
-    res.redirect("/admin/query");
+    res.redirect(`/admin/${id}/query`);
 };
 
 module.exports.queryExportExcel= async (req, res) => {
+    let id = req.params.id;
     if(answer.length != 0) {
         try { 
             // Sample array of objects (You can replace this with your data)
@@ -173,12 +183,12 @@ module.exports.queryExportExcel= async (req, res) => {
             res.setHeader('Content-Disposition', `attachment;filename=${query}.xlsx`);
             await workbook.xlsx.write(res);
             res.end();
-            res.redirect("/admin/query");
+            res.redirect(`/admin/${id}/query`);
         }catch (error) {
             res.status(500).send('Internal Server Error');
         }
     }else{
-        res.redirect("/admin/query");
+        res.redirect(`/admin/${id}/query`);
     }
 };
 

@@ -28,22 +28,25 @@
         <td><%= leave.enddate.toDateString() %></td>
         <td><%= leave.status %></td>
         <td class="d-flex flex-nowrap bd-highlight">
+          
           <!-- view leave  -->
-          <form method="GET" action="/admin/leave/view/<%= leave.leaverequestid %>">  
+          <form method="GET" action="/admin/<%= id %>/leave/view/<%= leave.leaverequestid %>">  
             <button type="submit" class="btn btn-primary ms-2">
               View Details
             </button>
           </form>
-            
+          
+          <%if(leave.status == "Pending"){%>
             <!-- approve leave -->
-          <form method="POST"  action="/admin/leave/approve/<%= leave.leaverequestid %>"> 
+          <form method="POST"  action="/admin/<%= id  %>/leave/approve/<%= leave.leaverequestid %>"> 
             <button type="submit" class="btn btn-success ms-2">Accept</button>  
           </form>
             
             <!-- reject leave -->
-          <form method="POST" action="/admin/leave/reject/<%= leave.leaverequestid %>">
+          <form method="POST" action="/admin/<%= id  %>/leave/reject/<%= leave.leaverequestid %>">
             <button type="submit" class="btn btn-danger ms-2">Reject</button>
           </form>
+          <% } %>
         </td>
         <% n++ %>
       </tr>
