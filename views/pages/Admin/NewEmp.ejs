@@ -55,7 +55,7 @@
 
             <label for="employeeDepartment">Department:</label>
             <select id="employeeDepartment" name="employeeDepartment" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
-                <option value="">Select Department</option>
+                <option value="NULL">Select Department</option>
                 <%for (let d of Dept) {%>
                 <option value=<%=d.deptname %>> <%=d.deptname %> </option>
                 <% } %>
