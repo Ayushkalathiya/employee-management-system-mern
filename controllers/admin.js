@@ -83,20 +83,6 @@ module.exports.addEmployee = async(req, res)=>{
     let EmpLName = req.body.employeeLName;
     let EmpPosition = req.body.employeePosition;
     let EmpEmail = req.body.employeeEmail;
-
-    let EmpDepartment = req.body.employeeDepartment;
-    let DeptArray = await db.query("SELECT deptid from departments where deptname=$1",[EmpDepartment]);
-    let dept = DeptArray.rows;
-    let deptID;
-    if(dept.length==0){
-        deptID=null;
-        console.log("invalid department");
-        res.redirect(`/admin/${id}/addEmp`);
-    }else{
-        deptID = dept[0].deptid ;
-    }
-    console.log(deptID)
-
     let EmpRole = req.body.employeeRole;
     let RoleID = await (db.query("SELECT roleid from roles where rolename=LOWER($1)",[EmpRole]));
     let roles = RoleID.rows;
@@ -104,16 +90,26 @@ module.exports.addEmployee = async(req, res)=>{
     console.log(roleID)
 
     let EmpSal = req.body.employeeSal*1;
-
-    (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,$6,NOW(),$7,$8)",
+    let EmpDepartment = req.body.employeeDepartment;
+    if(EmpDepartment === "NULL"){
+        (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
+        [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
+    }
+    else{
+        let DeptArray = await db.query("SELECT deptid from departments where deptname=$1",[EmpDepartment]);
+        let dept = DeptArray.rows;
+        let deptID = dept[0].deptid ;
+        (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,$6,NOW(),$7,$8)",
         [EmpID,EmpFName,EmpLName,EmpEmail,roleID,deptID,EmpPosition,EmpSal]))
+    }
+    
 
     const saltRounds = 10;
 
     bcrypt.hash(EmpID, saltRounds, async (err, hash)=> {
         await db.query("Insert into Credentials values($1,$2)",[EmpID,hash])
     });
-    res.redirect(`/admin/${id}/leave`);
+    res.redirect(`/admin/${id}/addEmp`);
 };
 
 
