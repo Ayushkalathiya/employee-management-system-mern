@@ -10,6 +10,7 @@ require('dotenv').config();
 const { Workbook } = require('exceljs');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const PDFDocument = require('pdfkit');
+app.use(bodyParser.json()); // Add this line to parse JSON data
 
 
 app.use(bodyParser.urlencoded({ extended: true }));

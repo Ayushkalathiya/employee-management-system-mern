@@ -4,6 +4,7 @@ const { Workbook } = require('exceljs');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const PDFDocument = require('pdfkit');
 
+
 const db = new pg.Client({
     user:"postgres",
     host:"localhost",
@@ -12,6 +13,35 @@ const db = new pg.Client({
     port:5432,
 });
 db.connect();
+
+let employees,employeeIDArray;
+async function main(){
+    try {
+        // Add your logic here to check if the employee ID exists in the database
+        employees = await db.query('SELECT EmployeeID from employees');
+        employeeIDArray = employees.rows;
+        console.log(employeeIDArray)
+    
+      } catch (error) {
+        console.error(`Error checking employee existence: ${error}`);
+      }
+    
+}
+main()
+
+// Assuming you have a function to check if an employee ID exists in your database
+async function checkExistence(employeeID) {
+    console.log("in"+employeeID)
+    try {
+      // Add your logic here to check if the employee ID exists in the database
+      let employees = await db.query('SELECT EmployeeID from employees where employeeID=$1', [employeeID]);
+      return employees.rowCount === 0; // Return true if non-existent, false otherwise
+    } catch (error) {
+      console.error(`Error checking employee existence: ${error}`);
+      return false; // Default to false if an error occurs
+    }
+  }
+
 
 // render All Employee Leave
 module.exports.renderAllLeave = async(req, res)=>{
@@ -112,6 +142,16 @@ module.exports.addEmployee = async(req, res)=>{
     res.redirect(`/admin/${id}/addEmp`);
 };
 
+module.exports.verifyID = async(req,res)=>{
+        const { employeeID } = req.body;
+        try {
+            const exists = await checkExistence(employeeID);
+            res.json({ check: exists });
+        } catch (error) {
+            console.error(`Error checking employee existence: ${error}`);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+};
 
 //sarthak
 let query;

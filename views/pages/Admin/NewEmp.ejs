@@ -1,85 +1,182 @@
 <% layout("./layout/admin") %>
    
-<div class="container mt-5 ms-1">
-    <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
-    <form action="/admin/<%= id %>/addEmp" method="POST">
-        <section style="margin-top: 20px;">
-            <label for="employeeID">Employee ID:</label>
-            <input
-                    type="text"
-                    id="employeeID"
-                    name="employeeID"
-                    placeholder="Enter Employee ID"
-                    required
-                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-            >
-            <label for="employeeFName">Employee First Name:</label>
-            <input
-                    type="text"
-                    id="employeeFName"
-                    name="employeeFName"
-                    placeholder="Enter First name"
-                    required
-                    style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px; margin-bottom: 1rem;"
-            >
-            <label for="employeeLName">Employee Last Name:</label>
-            <input
-                    type="text"
-                    id="employeeLName"
-                    name="employeeLName"
-                    placeholder="Enter Last name"
-                    required
-                    style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-            >
-            <br>
+        <div class="container mt-5 ms-1">
+            <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
+            <form action="/admin/add" method="POST">
+                <section style="margin-top: 20px;">
+                    <label for="employeeID">Employee ID: *</label>
+                    <input
+                            type="text"
+                            id="employeeID"
+                            name="employeeID"
+                            placeholder="Enter Employee ID"
+                            required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 0.5rem;"
+                    >
+                    <div id="employeeIDStatus" style="font-size: 14px; color: red; margin-bottom: 0.5rem;">Please Enter A Employee ID!</div>
+                    <label for="employeeFName">Employee First Name: *</label>
+                    <input
+                            type="text"
+                            id="employeeFName"
+                            name="employeeFName"
+                            placeholder="Enter First name"
+                            required
+                            style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px; margin-bottom: 1rem;"
+                    >
+                    <label for="employeeLName">Employee Last Name: *</label>
+                    <input
+                            type="text"
+                            id="employeeLName"
+                            name="employeeLName"
+                            placeholder="Enter Last name"
+                            required
+                            style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                    >
+                    <br>
+        
+                    <label for="employeePosition">Position: *</label>
+                    <input
+                            type="text"
+                            id="employeePosition"
+                            name="employeePosition"
+                            placeholder="Enter position"
+                            required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                    >
+        
+                    <label for="employeeEmail">Email ID: *</label>
+                    <input
+                            type="Email"
+                            id="employeeEmail"
+                            name="employeeEmail"
+                            placeholder="Enter Employee Email ID"
+                            required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                    >
+        
+                    <label for="employeeDepartment">Department:</label>
+                    <select id="employeeDepartment" name="employeeDepartment" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
+                        <option value="NULL">Select Department</option>
+                        <%for (let d of Dept) {%>
+                        <option value=<%=d.deptname %>> <%=d.deptname %> </option>
+                        <% } %>
+                    </select>
+        
+                    <label for="employeeRole">Role: *</label>
+                    <select id="employeeRole" name="employeeRole" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
+                        <option value="">Select Role</option>
+                        <%for (let r of Role) {%>
+                        <option value=<%=r.rolename %>> <%=r.rolename %> </option>
+                        <% } %>
+                    </select>
+        
+                    <label for="employeeSal">Salary: *</label>
+                    <input
+                            type="number"
+                            id="employeeSal"
+                            name="employeeSal"
+                            placeholder="Enter Employee Salary"
+                            required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                    >
+                    <button type="submit" style="background-color: gray; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;" id="submit" disabled>Add Employee</button>
+                </section>
+            </form>
+        </div>
+    
+    
 
-            <label for="employeePosition">Position:</label>
-            <input
-                    type="text"
-                    id="employeePosition"
-                    name="employeePosition"
-                    placeholder="Enter position"
-                    required
-                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-            >
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous">
+    </script>
+    <script src="/js/script.js"></script>
+    <script>
+        const employeeIDInput = document.getElementById('employeeID');
+        const traps = document.getElementById('submit');
+        const employeeIDStatus = document.getElementById('employeeIDStatus');
+    
+        employeeIDInput.addEventListener('input', function(event) {
+            const employeeID = event.target.value;
+            if(employeeID===""){
+                employeeIDStatus.innerText = 'Please Enter A Employee ID!';
+                employeeIDStatus.style.color = 'red';
+                traps.style.backgroundColor='gray';
+                traps.disabled = true;
+            }else{
+                checkExistence(employeeID);
+            }
+        });
 
-            <label for="employeeEmail">Email ID:</label>
-            <input
-                    type="Email"
-                    id="employeeEmail"
-                    name="employeeEmail"
-                    placeholder="Enter Employee Email ID"
-                    required
-                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-            >
+        async function checkExistence(employeeID) {
+                try {
+                    const response = await fetch(`/admin/<%= id  %>/verifyID`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ employeeID }) // Make sure employeeID is correctly sent
+                    });
+                    const data = await response.json();
+                    if (data.check) {
+                        employeeIDStatus.innerText = 'Employee ID Valid!';
+                        employeeIDStatus.style.color = 'green';
+                        traps.style.backgroundColor='black';
+                        traps.disabled = false;
+                    } else {
+                        employeeIDStatus.innerText = 'Employee ID Not Valid!';
+                        employeeIDStatus.style.color = 'red';
+                        traps.style.backgroundColor='gray';
+                        traps.disabled = true;
+                    }
+                } catch (error) {
+                    console.error(`Error checking employee existence: ${error}`);
+                    employeeIDStatus.innerText = 'Error checking ID.';
+                }
+            }
+</script>
+<!--     
+     <script>
+        const socket = new WebSocket('ws://localhost:8080');
+        // Get the employee ID input field
+        const employeeIDInput = document.getElementById('employeeID');
+        const traps = document.getElementById('submit');
+        // Get the div for displaying live text
+        const employeeIDStatus = document.getElementById('employeeIDStatus');
 
-            <label for="employeeDepartment">Department:</label>
-            <select id="employeeDepartment" name="employeeDepartment" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
-                <option value="NULL">Select Department</option>
-                <%for (let d of Dept) {%>
-                <option value=<%=d.deptname %>> <%=d.deptname %> </option>
-                <% } %>
-            </select>
+        function sendDataToServer(data) {
+            socket.send(JSON.stringify(data)); // Convert data to JSON and send it
+        }
 
-            <label for="employeeRole">Role:</label>
-            <select id="employeeRole" name="employeeRole" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
-                <option value="">Select Role</option>
-                <%for (let r of Role) {%>
-                <option value=<%=r.rolename %>> <%=r.rolename %> </option>
-                <% } %>
-            </select>
+      
+        // Event listener for input events on the employee ID input field
+        employeeIDInput.addEventListener('input', async function(event) {
+            const employeeID = event.target.value;
+            sendDataToServer(employeeID)
+        });
 
-            <label for="employeeSal">Salary:</label>
-            <input
-                    type="number"
-                    id="employeeSal"
-                    name="employeeSal"
-                    placeholder="Enter Employee Salary"
-                    required
-                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-            >
-            <button type="submit" style="background-color: black; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">Add Employee</button>
-        </section>
-    </form>
-</div>
+        socket.onmessage = function(event) {
+            try {
+                const data = JSON.parse(event.data);
+                const check = data.check;
+                if (check) {
+                    employeeIDStatus.innerText = 'Employee ID Valid!';
+                    employeeIDStatus.style.color = 'green'; // Change color to green
+                    // Enable the "Add Employee" button
+                    traps.disabled = false;
+                } else {
+                    employeeIDStatus.innerText = 'Employee ID Not Valid!';
+                    employeeIDStatus.style.color = 'red'; // Change color to red
+                    // Disable the "Add Employee" button
+                    traps.disabled = true;
+                }
+            } catch (error) {
+                console.error(`Error checking employee existence: ${error}`);
+                employeeIDStatus.innerText = 'Error checking ID.'; // Inform user about error
+            }
+    };
+</script> -->
+   
 

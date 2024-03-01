@@ -5,6 +5,7 @@ const adminController = require("../controllers/admin.js");
 
 
 
+
 router.get(
     "/:id/leave",
     wrapAsync(adminController.renderAllLeave)
@@ -60,7 +61,10 @@ router.get(
 //     wrapAsync(adminController.queryExportPdf)
 // )
 
-
+router.post(
+    "/:id/verifyID",
+    wrapAsync(adminController.verifyID)
+)
 
 
 
