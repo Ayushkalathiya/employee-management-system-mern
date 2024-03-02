@@ -1,4 +1,4 @@
-/* body {
+body {
     margin: 0;
     font-family: 'Arial', sans-serif;
 }
@@ -49,15 +49,11 @@ nav i {
 
 nav a i{
     margin-right: 0.8rem;
-} */
+}
 
-/* .content {
+.content {
 margin-left: 220px;
 padding: 20px;
-} */
-
-.content{
-  margin-left: 5rem !important;
 }
 
 .show{
@@ -141,43 +137,40 @@ padding: 20px;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Blue shadow effect; modify as needed */
   }
 
-  .photo-container {
-    width: 150px;
-    height: 200px;
-    border: 2px solid #ccc;
-    overflow: hidden;
-    text-align: center;
+  /* newEmployee page */
+
+  /*<!--        section {*/
+/*<!--            max-width: 600px;*/
+/*<!--            margin: 20px auto;*/
+/*<!--            background-color: #fff;*/
+/*<!--            padding: 20px;*/
+/*<!--            border-radius: 8px;*/
+/*<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*           }*/
+
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
-.photo-container img {
-    max-width: 100%;
-    max-height: 100%;
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
 }
-.upload-photo {
-    display: none;
-}
-.UpdateButton {
-            padding: 1.3em 3em;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            font-weight: 500;
-            color: white;
-            background-color: black;
-            border: none;
-            border-radius: 45px;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease 0s;
-            cursor: pointer;
-            outline: none;
-}
-          
-.UpdateButton:hover {
-    background-color: #23c483;
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+
+button {
+    background-color: #333;
     color: #fff;
-    transform: translateY(-7px);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
-          
-.UpdateButton:active {
-    transform: translateY(-1px);
+
+button:hover {
+    background-color: #555;
 }

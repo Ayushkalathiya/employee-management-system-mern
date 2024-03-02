@@ -53,7 +53,7 @@ module.exports.renderAllLeave = async(req, res)=>{
         allreq.push(row);
     });
     console.log(allreq);
-    res.render("./pages/admin/leave_req.ejs",{allreq,id});
+    res.render("./pages/admin/leave_req.ejs",{allreq,id,error: false});
 };
 
 // view Employee one leave
@@ -67,7 +67,7 @@ module.exports.viewLeave = async(req, res)=>{
         allreq.push(row);
     });
     console.log("View Request : ", allreq);
-    res.render("./pages/admin/view_leave.ejs",{allreq,id});
+    res.render("./pages/admin/view_leave.ejs",{allreq,id,error: false});
 };
 
 
@@ -101,7 +101,7 @@ module.exports.addEmployeePage = async(req, res)=>{
     let Deptartments = Dept.rows;
     let roles = Role.rows;
     console.log(roles)
-    res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id});
+    res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id,error: false});
 };
 
 module.exports.addEmployee = async(req, res)=>{
@@ -165,7 +165,7 @@ let answer=[];
 
 module.exports.queryPage=(req,res)=>{
     let id = req.params.id;
-    res.render("./pages/admin/query.ejs",{answer:answer,id});
+    res.render("./pages/admin/query.ejs",{answer:answer,id,error: false});
 };
 
 const genAI = new GoogleGenerativeAI(process.env.GoogleGenerativeAI);

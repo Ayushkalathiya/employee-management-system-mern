@@ -21,23 +21,33 @@
             <i class="fas fa-user-shield"></i>
         </div>
         <div class="welcome-text">
-            Welcome back, <%= id %>
+            Welcome back, <%=id %>  
         </div>
     </header>
 
-    <nav class="mt-5">
-        <a href="/emp/<%= id %>"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="/emp/<%= id %>/profile"><i class="fas fa-building"></i> My Profile</a>
-        <!-- <a href="#"><i class="fas fa-user-tie"></i> </a> -->
-        <a href="#"><i class="fas fa-money-bill-wave"></i> Salary history</a>
-        <a href="/emp/<%= id %>/leave"><i class="fas fa-clipboard-list"></i> Leave </a>
-        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+ 
+    <nav class="mt-5 d-flex flex-column bg-light col-md-2">
+        <a href="/emp/<%= id %>" class="nav-link active mb-3">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/emp/<%= id %>/profile" class="nav-link mb-3">
+          <i class="fas fa-building"></i> My Profile
+        </a>
+        <a href="#" class="nav-link mb-3">
+          <i class="fas fa-money-bill-wave"></i> Salary History
+        </a>
+        <a href="/emp/<%= id %>/leave" class="nav-link mb-3">
+          <i class="fas fa-calendar-check"></i>Apply Leave
+        </a>
+        <a href="/logout" class="nav-link">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </nav>
+      
 
     <div class="content">
         <!-- for flash -->
         <%- include("../includes/flash.ejs") %>
-        <!-- Content goes here -->
         <!-- ejs-mate -->
         <%- body -%>
     </div>

@@ -141,14 +141,14 @@ async function otp(){
 // render  login page 
 module.exports.renderLogin = async (req, res) => {
     console.log("in root");
-    res.render("./pages/login.ejs");
+    res.render("./pages/login.ejs",{error: false});
 };
 
 
 // forgot password
 // render forget password
 module.exports.renderForgotpass = async (req, res) => {
-    res.render("./pages/forgetPass.ejs");
+    res.render("./pages/forgetPass.ejs",{error: false});
 }
 
 //forgot password  
@@ -356,7 +356,7 @@ module.exports.finallogin = async (req, res) => {
         finalRole="admin";
         req.flash("success","welcome back...");
         console.log(userName);
-        res.render("./pages/Admin/admin.ejs",{id : userName});
+        res.render("./pages/Admin/admin.ejs",{id : userName,error: false});
     }else{
         req.flash("error","Incorrect OTP Please Try Again...");
         res.render("./pages/otp.ejs");
