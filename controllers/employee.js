@@ -137,3 +137,8 @@ module.exports.addProfile =  async(req, res) => {
     }
 
 };
+
+module.exports.renderProfile = async (req, res) => {
+    let id = req.params.id;
+    res.render("./pages/Employee/emp_profile.ejs",{id});
+};

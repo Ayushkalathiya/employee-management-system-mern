@@ -39,6 +39,9 @@ router
     .get(wrapAsync(employeeController.renderLeaveApp))
     .post(wrapAsync(employeeController.createLeave));
 
-
+    router.get(
+        "/:id/profile",
+        wrapAsync(employeeController.renderProfile) 
+    );
 
 module.exports = router;

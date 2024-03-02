@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Employee Information Form</title>
+    <link rel="stylesheet" href="/css/profile.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <header class="fixed-top">
+        <div class="admin-logo">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="welcome-text">
+            Welcome back, <%= id %>
+        </div>
+    </header>
+
+    <nav class="mt-5">
+        <a href="/emp/<%= id %>"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/emp/<%= id %>/profile"><i class="fas fa-building"></i> My Profile</a>
+        <!-- <a href="#"><i class="fas fa-user-tie"></i> </a> -->
+        <a href="#"><i class="fas fa-money-bill-wave"></i> Salary History</a>
+        <a href="/emp/<%= id %>/leave"><i class="fas fa-clipboard-list"></i> Leave </a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="content">
+        <div class="container mt-5 ms-1">
+            <form>
+                <fieldset>
+
+                <legend style="text-align: center; font-size: 2.5rem;">Personal Information</legend>
+                        <div style="display: flex; gap: 40px;">
+                            <div style="display: flex; flex-direction: column; width: 110%;">
+                                <label for="Employee_ID">Employee ID:</label>
+                                <input type="text" class="form-control" id="Employee_ID" name="Employee_ID" value="Give ID HERE" readonly>
+                                <br>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label for="first_name">First Name:</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="Give First Name HERE" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label for="last_name">Last Name:</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="Give Last Name HERE" readonly>
+                                    </div>
+                                </div>
+                                <label for="Display_Name">Display Name:</label>
+                                <input type="text" class="form-control" id="Display_Name" name="Display_Name" value="Give First Name + Last Name HERE" readonly>
+                                <br>
+                                <div class="mb-3">
+                                    <label>Gender:</label><br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="male" name="gender" value="Male">
+                                        <label class="form-check-label" for="male">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="female" name="gender" value="Female">
+                                        <label class="form-check-label" for="female">Female</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="other" name="gender" value="other">
+                                        <label class="form-check-label" for="other">Other</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Profile Picture Upload -->
+                            <div class="mb-3" style="width:30%; display: flex; justify-content: flex-end; align-items: flex-start; padding-right: 60px;">
+                                <div>
+                                    <br>
+                                    <input type="file" class="form-control upload-photo" id="photo" name="photo" accept="image/*">
+                                    <div class="photo-container" style="display: flex; justify-content: center; align-items: center;">
+                                        <label for="photo" style="cursor: pointer;">
+                                            <i class="fas fa-camera fa-2x"></i><br>
+                                            Click to upload
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="mb-3">
+                        <label for="date_of_birth">Date of Birth:</label>
+                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address">Address:</label>
+                        <textarea class="form-control" id="address" name="address">Address Here</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mobile">Mobile:</label>
+                        <input type="tel" class="form-control" id="mobile" name="mobile" value="Mobile Here">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email_address">Email Address:</label>
+                        <input type="email" class="form-control" id="email_address" name="email_address" value="Email Here">
+                    </div>
+                </fieldset>
+                <br>
+                <hr style="border-width: 2px; border-color: black;">
+                <fieldset>
+                    <legend style="text-align: center; font-size: 2.5rem;">Job Details</legend>
+                    <div class="mb-3">
+                        <label for="start_date">Start Date:</label>
+                        <!-- <--Give date in YYYY-MM-DD format only-->
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="2024-03-02" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="position_title">Position Title:</label>
+                        <input type="text" class="form-control" id="position_title" name="position_title" value="Give Position HERE" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="company_name">Company Name:</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" value="Random Company Name SGP" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Department_Name">Department Name:</label>
+                        <input type="text" class="form-control" id="Department_Name" name="Department_Name" value="GIVE DEPTNAME Here" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="User_Type">User Type:</label>
+                        <input type="text" class="form-control" id="User_Type" name="User_Type" value="GIVE UserType(Admin/User) Here" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="company_phone">Company Phone Number:</label>
+                        <input type="tel" class="form-control" id="company_phone" name="company_phone" value="GIVE Random No. Here" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="company_email">Company Email:</label>
+                        <input type="email" class="form-control" id="company_email" name="company_email" value="GIVE Random Email. Here" readonly>
+                    </div>
+                </fieldset>
+                <br>
+                <div style="text-align: center;">
+                    <button class="UpdateButton"> Update </button>            
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- for validation in form -->
+    <script src="/js/script.js"></script>
+</body>
+</html>
