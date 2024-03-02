@@ -122,8 +122,14 @@ module.exports.addEmployee = async(req, res)=>{
     let EmpSal = req.body.employeeSal*1;
     let EmpDepartment = req.body.employeeDepartment;
     if(EmpDepartment === "NULL"){
-        (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
-        [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
+        console.log("YES")
+        try{
+            (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
+            [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
+        }
+        catch(err){
+            console.log(err);
+        }
     }
     else{
         let DeptArray = await db.query("SELECT deptid from departments where deptname=$1",[EmpDepartment]);
@@ -132,13 +138,13 @@ module.exports.addEmployee = async(req, res)=>{
         (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,$6,NOW(),$7,$8)",
         [EmpID,EmpFName,EmpLName,EmpEmail,roleID,deptID,EmpPosition,EmpSal]))
     }
-    
-
     const saltRounds = 10;
-
+    try{
     bcrypt.hash(EmpID, saltRounds, async (err, hash)=> {
-        await db.query("Insert into Credentials values($1,$2)",[EmpID,hash])
+        await db.query("Insert into Credentials(EmployeeID,password) values($1,$2)",[EmpID,hash])
     });
+    }
+    catch(e){console.log(e)}
     res.redirect(`/admin/${id}/addEmp`);
 };
 

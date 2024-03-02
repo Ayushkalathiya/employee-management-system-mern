@@ -2,7 +2,7 @@
    
         <div class="container mt-5 ms-1">
             <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
-            <form action="/admin/add" method="POST">
+            <form action="/admin/<%= id  %>/newEmp" method="POST">
                 <section style="margin-top: 20px;">
                     <label for="employeeID">Employee ID: *</label>
                     <input
@@ -64,7 +64,7 @@
         
                     <label for="employeeRole">Role: *</label>
                     <select id="employeeRole" name="employeeRole" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">
-                        <option value="">Select Role</option>
+                        <option value="User">Select Role</option>
                         <%for (let r of Role) {%>
                         <option value=<%=r.rolename %>> <%=r.rolename %> </option>
                         <% } %>

@@ -35,7 +35,7 @@ router.get(
 );
 
 router.post(
-    "/:id/addEmp",
+    "/:id/newEmp",
     wrapAsync(adminController.addEmployee)
 );
 

@@ -99,11 +99,11 @@ async function SendMailforReset(EmailID,Message,Subject){
         text: Message
     };
 
-    transporter.sendMail(mailOptions, function(error, info){
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         } else {
-            req.flash("success","Check your Registered Email account")
+            req.flash("success", "Check your Registered Email account");
             console.log('Email sent: ' + info.response);
         }
     });
