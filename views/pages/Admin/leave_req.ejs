@@ -1,7 +1,19 @@
-<!-- using ejs-mate -->
 <% layout("./layout/admin") %>
+
 <div class="container mt-5 ms-1">
   <h2 class="text-center mb-4 fw-bolder">Leave Request</h2>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <select class="form-select" id="filter-status">
+        <option value="">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approve</option>
+        <option value="Rejected">Reject</option>
+      </select>
+    </div>
+  </div>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -15,12 +27,11 @@
         <th scope="col">Action</th>
       </tr>
     </thead>
-      
     <tbody>
-      <% let n=1 %>  
-      <tr>
-        <% for (let leave of allreq) {%>
-        <th scope="row"><%= n  %></th>
+      <% let n = 1 %>
+      <% for (let leave of allreq) { %>
+      <tr class="<%- leave.status == 'Pending' ? 'text-warning' : leave.status == 'Approve' ? 'text-success' : 'text-danger' %>">
+        <th scope="row"><%= n %></th>
         <td><%= leave.employeeid %></td>
         <td><%= leave.leavetype %></td>
         <td><%= leave.startdate.toDateString() %></td>
@@ -28,29 +39,43 @@
         <td><%= leave.enddate.toDateString() %></td>
         <td><%= leave.status %></td>
         <td class="d-flex flex-nowrap bd-highlight">
-          
-          <!-- view leave  -->
-          <form method="GET" action="/admin/<%= id %>/leave/view/<%= leave.leaverequestid %>">  
-            <button type="submit" class="btn btn-primary ms-2">
-              View Details
-            </button>
+          <form method="GET" action="/admin/<%= id %>/leave/view/<%= leave.leaverequestid %>">
+            <button type="submit" class="btn btn-primary ms-2">View Details</button>
           </form>
-          
-          <%if(leave.status == "Pending"){%>
-            <!-- approve leave -->
-          <form method="POST"  action="/admin/<%= id  %>/leave/approve/<%= leave.leaverequestid %>"> 
-            <button type="submit" class="btn btn-success ms-2">Accept</button>  
+
+          <% if (leave.status === "Pending") { %>
+          <form method="POST" action="/admin/<%= id %>/leave/approve/<%= leave.leaverequestid %>">
+            <button type="submit" class="btn btn-success ms-2">Accept</button>
           </form>
-            
-            <!-- reject leave -->
-          <form method="POST" action="/admin/<%= id  %>/leave/reject/<%= leave.leaverequestid %>">
+
+          <form method="POST" action="/admin/<%= id %>/leave/reject/<%= leave.leaverequestid %>">
             <button type="submit" class="btn btn-danger ms-2">Reject</button>
           </form>
           <% } %>
         </td>
-        <% n++ %>
       </tr>
+      <% n++ %>
       <% } %>
     </tbody>
-    </table>
+  </table>
 </div>
+
+<script>
+  const filterStatus = document.getElementById('filter-status');
+filterStatus.addEventListener('change', (event) => {
+  const selectedStatus = event.target.value;
+  const tableRows = document.querySelectorAll('tbody tr');
+
+  tableRows.forEach((row) => {
+    const rowStatus = row.classList.contains('text-warning') ? 'Pending' :
+      row.classList.contains('text-success') ? 'Approved' : 'Rejected';
+
+    if (selectedStatus === '' || selectedStatus === rowStatus) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+});
+
+</script>

@@ -4,6 +4,7 @@ const { Workbook } = require('exceljs');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const PDFDocument = require('pdfkit');
 
+
 const db = new pg.Client({
     user:"postgres",
     host:"localhost",
@@ -275,8 +276,6 @@ module.exports.queryExportExcel= async (req, res) => {
     // };
 
     
-
-
     let employees_attendence=[];
 
     function formatDate(date) {

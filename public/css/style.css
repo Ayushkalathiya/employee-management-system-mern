@@ -23,7 +23,7 @@ margin-left: 10px;
 }
 
 nav {
-width: 200px !important;
+width: 200px !important;  
 background-color: #f4f4f4;
 padding-top: 20px !important;
 height: 100vh !important;
@@ -31,24 +31,34 @@ position: fixed !important;
 margin-top: 0.05rem !important;
 }
 
-nav a {
+/* nav a {
 display: block;
 padding: 10px;
 text-decoration: none;
 color: #333;
 margin-bottom: 5px;
-}
+font-size: 25px;
+} */ 
 
-nav a:hover{
+ nav a:hover{
     opacity: 0.5;
 }
 
 nav i {
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
+    /* margin-right: 1rem; */
+    padding-left: 1rem;
+    padding-right:0.7rem ;
 }
 
 nav a i{
     margin-right: 0.8rem;
+    font-size: 1.1rem
+}
+
+.fa-calendar-check{
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
 }
 
 .content {
@@ -174,6 +184,7 @@ button {
 button:hover {
     background-color: #555;
 }
+
 
 
 .employee-list {

@@ -63,7 +63,6 @@ create table LeaveRequests(
 	Foreign Key(EmployeeID) References Employees(EmployeeID)
 );
 
-
 CREATE Table attendence(
 	EmployeeID text NOT NULL,
 	date DATE NOT NULL,

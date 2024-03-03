@@ -15,7 +15,6 @@ app.use(bodyParser.json()); // Add this line to parse JSON data
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 app.engine("ejs", ejsMate);
 
 const db = new pg.Client({

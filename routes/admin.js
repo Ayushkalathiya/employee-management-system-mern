@@ -35,7 +35,7 @@ router.get(
 );
 
 router.post(
-    "/:id/newEmp",
+    "/:id/addEmp",
     wrapAsync(adminController.addEmployee)
 );
 
@@ -66,10 +66,6 @@ router.post(
     wrapAsync(adminController.verifyID)
 )
 
-router.post(
-    "/:id/verifyID",
-    wrapAsync(adminController.verifyID)
-)
 
 
 router.get(
@@ -77,6 +73,9 @@ router.get(
     wrapAsync(adminController.markAttendance)
 )
 
-
+router.post(
+    "/:id/submitAttendance",
+    wrapAsync(adminController.submitAttendance)
+)
 
 module.exports = router;
