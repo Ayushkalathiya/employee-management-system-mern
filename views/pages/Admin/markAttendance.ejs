@@ -1,0 +1,67 @@
+<% layout("./layout/admin") %>
+<!-- <div class="sarthakquerypage">
+<form action="/admin/markAttendance" method="POST">
+  <label for="employeeId">Employees:</label>
+  <div class="employee-list">
+    </div>
+
+  <label for="date">Date:</label>
+  <input type="date" name="date" id="date">
+    <button type="submit">Submit</button>
+</form>
+</div> -->
+<div class="container mt-5 ms-1">
+    <h2 class="text-center mb-4 fw-bolder">Attendance for <%=date%></h2>
+    <form action="/admin/<%=id%>/submitAttendance" method="POST">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Sr. No.</th>
+                <th scope="col">Emp ID</th>
+                <th scope="col">Emp Name</th>
+                <th scope="col">dept Name</th>
+                <th scope="col">Attendance-checkbox</th>
+            </tr>
+            </thead>
+            
+            <tbody>
+            <% let n=1 %>  
+            <tr>
+                <% employees.forEach(employee => { %>
+                <th scope="row"><%= n  %></th>
+                <td><%= employee.employeeid %></td>
+                <td><%= employee.name %></td>
+                <!-- <td class="d-flex flex-nowrap bd-highlight"> -->
+                <td><%= employee.deptname %></td>
+                <td class="checkbox">
+                    <label class="checkbox-container">
+                        <input class="custom-checkbox attendance-checkbox" type="checkbox" name="attendance[]" value="<%=employee.employeeid%>">
+                        <span class="checkmark"></span>
+                    </label>
+                </td>
+                <% n++ %>
+            </tr>
+            <% }) %>
+            </tbody>
+        </table>
+        <input type="hidden" name="employeeIds" value="<%= JSON.stringify(employees.map(employee => employee.employeeid)) %>">
+        <button type="submit" class="btn btn-success ms-2 text-center lol">Submit</button>
+    </form>
+</div>
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('.attendance-checkbox');
+        const absentIdsInput = document.getElementById('absentIds');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const absentIds = Array.from(checkboxes)
+                    .filter(checkbox => !checkbox.checked)
+                    .map(checkbox => checkbox.value);
+
+                absentIdsInput.value = absentIds.join(',');
+            });
+        });
+    });
+</script> -->

@@ -99,11 +99,11 @@ async function SendMailforReset(EmailID,Message,Subject){
         text: Message
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log(error);
         } else {
-            req.flash("success", "Check your Registered Email account");
+            req.flash("success","Check your Registered Email account")
             console.log('Email sent: ' + info.response);
         }
     });
@@ -141,14 +141,14 @@ async function otp(){
 // render  login page 
 module.exports.renderLogin = async (req, res) => {
     console.log("in root");
-    res.render("./pages/login.ejs",{error: false});
+    res.render("./pages/login.ejs");
 };
 
 
 // forgot password
 // render forget password
 module.exports.renderForgotpass = async (req, res) => {
-    res.render("./pages/forgetPass.ejs",{error: false});
+    res.render("./pages/forgetPass.ejs");
 }
 
 //forgot password  
@@ -356,7 +356,7 @@ module.exports.finallogin = async (req, res) => {
         finalRole="admin";
         req.flash("success","welcome back...");
         console.log(userName);
-        res.render("./pages/Admin/admin.ejs",{id : userName,error: false});
+        res.render("./pages/Admin/admin.ejs",{id : userName});
     }else{
         req.flash("error","Incorrect OTP Please Try Again...");
         res.render("./pages/otp.ejs");

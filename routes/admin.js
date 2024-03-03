@@ -66,6 +66,16 @@ router.post(
     wrapAsync(adminController.verifyID)
 )
 
+router.post(
+    "/:id/verifyID",
+    wrapAsync(adminController.verifyID)
+)
+
+
+router.get(
+    "/:id/markAttendance",
+    wrapAsync(adminController.markAttendance)
+)
 
 
 

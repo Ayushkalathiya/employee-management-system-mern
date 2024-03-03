@@ -15,6 +15,7 @@ app.use(bodyParser.json()); // Add this line to parse JSON data
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
 app.engine("ejs", ejsMate);
 
 const db = new pg.Client({
@@ -27,6 +28,9 @@ const db = new pg.Client({
 });
 
 db.connect();
+
+// Set view engine
+app.set('view engine', 'ejs');
 
 const employee = require("./routes/employee.js");
 const admin = require("./routes/admin.js");

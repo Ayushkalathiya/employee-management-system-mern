@@ -4,7 +4,6 @@ const { Workbook } = require('exceljs');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const PDFDocument = require('pdfkit');
 
-
 const db = new pg.Client({
     user:"postgres",
     host:"localhost",
@@ -53,7 +52,7 @@ module.exports.renderAllLeave = async(req, res)=>{
         allreq.push(row);
     });
     console.log(allreq);
-    res.render("./pages/admin/leave_req.ejs",{allreq,id,error: false});
+    res.render("./pages/admin/leave_req.ejs",{allreq,id});
 };
 
 // view Employee one leave
@@ -67,7 +66,7 @@ module.exports.viewLeave = async(req, res)=>{
         allreq.push(row);
     });
     console.log("View Request : ", allreq);
-    res.render("./pages/admin/view_leave.ejs",{allreq,id,error: false});
+    res.render("./pages/admin/view_leave.ejs",{allreq,id});
 };
 
 
@@ -101,7 +100,7 @@ module.exports.addEmployeePage = async(req, res)=>{
     let Deptartments = Dept.rows;
     let roles = Role.rows;
     console.log(roles)
-    res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id,error: false});
+    res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id});
 };
 
 module.exports.addEmployee = async(req, res)=>{
@@ -122,14 +121,8 @@ module.exports.addEmployee = async(req, res)=>{
     let EmpSal = req.body.employeeSal*1;
     let EmpDepartment = req.body.employeeDepartment;
     if(EmpDepartment === "NULL"){
-        console.log("YES")
-        try{
-            (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
-            [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
-        }
-        catch(err){
-            console.log(err);
-        }
+        (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
+        [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
     }
     else{
         let DeptArray = await db.query("SELECT deptid from departments where deptname=$1",[EmpDepartment]);
@@ -138,13 +131,13 @@ module.exports.addEmployee = async(req, res)=>{
         (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,$6,NOW(),$7,$8)",
         [EmpID,EmpFName,EmpLName,EmpEmail,roleID,deptID,EmpPosition,EmpSal]))
     }
+    
+
     const saltRounds = 10;
-    try{
+
     bcrypt.hash(EmpID, saltRounds, async (err, hash)=> {
-        await db.query("Insert into Credentials(EmployeeID,password) values($1,$2)",[EmpID,hash])
+        await db.query("Insert into Credentials values($1,$2)",[EmpID,hash])
     });
-    }
-    catch(e){console.log(e)}
     res.redirect(`/admin/${id}/addEmp`);
 };
 
@@ -165,7 +158,7 @@ let answer=[];
 
 module.exports.queryPage=(req,res)=>{
     let id = req.params.id;
-    res.render("./pages/admin/query.ejs",{answer:answer,id,error: false});
+    res.render("./pages/admin/query.ejs",{answer:answer,id});
 };
 
 const genAI = new GoogleGenerativeAI(process.env.GoogleGenerativeAI);
@@ -280,3 +273,78 @@ module.exports.queryExportExcel= async (req, res) => {
     //         res.status(500).send('Internal Server Error');
     //     }
     // };
+
+    
+
+
+    let employees_attendence=[];
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+    
+    
+    let formattedDate;
+
+    module.exports.markAttendance=async(req,res)=>{
+        let id = req.params.id;
+        // Get the current date
+        const currentDate = new Date();
+         // Format the current date
+        formattedDate = formatDate(currentDate);
+        //week ends sunday,saterday
+        // if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+        //     res.render("./pages/weekendattendence.ejs",{id:id})
+        // }else{
+            employees_attendence= await db.query("SELECT EmployeeID ,(FirstName || ' ' || LastName) as name,DeptName from Employees e,Departments d where e.DeptID=d.DeptID and roleid != 200;");
+            console.log(employees_attendence.rows);
+            res.render("./pages/admin/markAttendance.ejs",{employees:employees_attendence.rows,date:formattedDate,id});
+        //}
+    };
+
+    module.exports.submitAttendance=async (req,res)=>{
+        let id = req.params.id;
+        console.log("Attendance");
+
+        // Get the list of all employee IDs
+        const allEmployeeIds = JSON.parse(req.body.employeeIds) || [];
+
+        // Get IDs of selected employees (those who were marked present)
+        const presentEmployeeIds = req.body.attendance || [];
+
+        // Calculate IDs of absent employees
+        const absentEmployeeIds = allEmployeeIds.filter(employeeid => !presentEmployeeIds.includes(employeeid));
+
+        // Process the selected employees and mark attendance accordingly
+        console.log('Present employees:', presentEmployeeIds);
+        console.log('Absent employees:', absentEmployeeIds);
+
+        // Get the current date
+        const currentDate = new Date();
+         // Format the current date
+        const todayDate = formatDate(currentDate);    
+
+        // You can store the attendance data in the database or perform any other necessary actions here
+        const alreadyDoneAttendence=await db.query("SELECT * from attendence where date=$1;",[todayDate]);
+
+        //console.log(alreadyDoneAttendence+" sarthak "+alreadyDoneAttendence.rows.length);
+        if(alreadyDoneAttendence.rows.length == 0) {
+            //present employees
+            for (let presentEmp of presentEmployeeIds){
+                const present= await db.query("INSERT INTO attendence values($1,$2,$3);",[presentEmp,todayDate,"Present"]);
+               // console.log(present);
+            }
+            //absent employees
+            for (let absentEmp of absentEmployeeIds){
+                const absent=await db.query("INSERT INTO attendence values($1,$2,$3);",[absentEmp,todayDate,"Absent"]);
+                //console.log(absent);
+            }
+            // Redirect to the "Attendance Submitted" page
+            res.render('./pages/attendanceSubmitted',{id});
+        }else{
+            res.render('./pages/attendencealreadydone',{id});
+        }
+    };

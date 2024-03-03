@@ -21,19 +21,19 @@ module.exports.dashboard = async (req, res) => {
         leavereq.push(row);
     });
     // console.log(leavereq[0].employeeid);
-    res.render("./pages/Employee/dashboard.ejs", { id, leavereq ,error: false});
+    res.render("./pages/Employee/dashboard.ejs", { id, leavereq });
 
 };
 
 module.exports.renderProfile = async (req, res) => {
     let id = req.params.id;
-    res.render("./pages/Employee/profile.ejs", { id,error: false});
+    res.render("./pages/Employee/profile.ejs", { id });
 };
 
 
 module.exports.renderLeaveApp = async (req, res) => {
     let id = req.params.id;
-    res.render("./pages/Employee/leave.ejs",{id,error: false});
+    res.render("./pages/Employee/leave.ejs",{id});
 };
 
 module.exports.createLeave = async(req,res)=>{
@@ -136,9 +136,4 @@ module.exports.addProfile =  async(req, res) => {
         console.log(err);
     }
 
-};
-
-module.exports.renderProfile = async (req, res) => {
-    let id = req.params.id;
-    res.render("./pages/Employee/emp_profile.ejs",{id,error: false});
 };
