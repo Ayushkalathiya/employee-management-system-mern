@@ -295,13 +295,13 @@ module.exports.queryExportExcel= async (req, res) => {
          // Format the current date
         formattedDate = formatDate(currentDate);
         //week ends sunday,saterday
-        // if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
-        //     res.render("./pages/weekendattendence.ejs",{id:id})
-        // }else{
+        if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+            res.render("./pages/weekendattendence.ejs",{id:id})
+        }else{
             employees_attendence= await db.query("SELECT EmployeeID ,(FirstName || ' ' || LastName) as name,DeptName from Employees e,Departments d where e.DeptID=d.DeptID and roleid != 200;");
             console.log(employees_attendence.rows);
             res.render("./pages/admin/markAttendance.ejs",{employees:employees_attendence.rows,date:formattedDate,id});
-        //}
+        }
     };
 
     module.exports.submitAttendance=async (req,res)=>{
