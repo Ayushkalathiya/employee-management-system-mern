@@ -298,7 +298,7 @@ module.exports.queryExportExcel= async (req, res) => {
         if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
             res.render("./pages/weekendattendence.ejs",{id:id})
         }else{
-            employees_attendence= await db.query("SELECT EmployeeID ,(FirstName || ' ' || LastName) as name,DeptName from Employees e,Departments d where e.DeptID=d.DeptID and roleid != 200;");
+            employees_attendence = await db.query("SELECT EmployeeID ,(FirstName || ' ' || LastName) as name,DeptName from Employees e LEFT JOIN Departments d ON  e.DeptID=d.DeptID where roleid = (Select roleid from roles where roleName!='admin');");
             console.log(employees_attendence.rows);
             res.render("./pages/admin/markAttendance.ejs",{employees:employees_attendence.rows,date:formattedDate,id});
         }
