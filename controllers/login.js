@@ -109,7 +109,26 @@ async function SendMailforReset(EmailID,Message,Subject){
     });
 }
 
-async function otp(){
+async function otp(name,email){
+    const otpTemplate =(UserName,OTP) =>`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP</title>
+</head>
+<body>
+    <hr>
+    <b>It is an auto generated email, please do not reply</b>
+    <hr>
+    <b>Dear ${UserName},</b>
+    <br>  
+    <p><b>Your One Time Password (OTP) : </b>${OTP}</p>
+    <p>Use this OTP to Log in to the Employee Management System</p>
+    <hr>   
+</body>
+</html>
+`
     OTP = Math.floor(100000 + Math.random() * 900000)
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -121,9 +140,10 @@ async function otp(){
     
     const mailOptions = {
         from: process.env.EMAIL,
-        to: process.env.RecEMAIL,
+        to: email,
         subject: 'OTP',
-        text: "Your OTP is "+ OTP
+        text: "Your OTP is "+ OTP,
+        html: otpTemplate(name,OTP)
     };
     
     transporter.sendMail(mailOptions, function(error, info){
@@ -293,7 +313,9 @@ module.exports.verify =  async (req, res) => {
                 }
                 if (result === true) {
                     if(finalRole.toLowerCase() == "admin"){
-                        otp();
+                        let name;
+                        name = (await db.query("Select CONCAT(FirstName,CONCAT(' ',LastName)) as name , Email from Employees where EmployeeId = $1",[userName])).rows;
+                        otp(name[0].name,name[0].email);
                         req.flash("success","OTP sent successfully");
                         res.render("./pages/otp.ejs",{OTP : OTP});
                     }else{
