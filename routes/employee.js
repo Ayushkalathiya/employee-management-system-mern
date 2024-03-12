@@ -2,18 +2,8 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const bodyParser =  require('body-parser');
-// const pg = require("pg");
-// const db = new pg.Client({
-//     user:"postgres",
-//     host:"localhost",
-//     database:process.env.DBNAME,
-//     password:process.env.DBPASS,
-//     port:5432,
-// });
-// db.connect();
 
-
-const wrapAsync = require('../utils/wrapAsync.js');
+const wrapAsync = require("../utils/WrapAsync.js");
 
 app.use(bodyParser.urlencoded({extended: true}));
 
