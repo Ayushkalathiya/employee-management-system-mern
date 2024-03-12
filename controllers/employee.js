@@ -25,10 +25,12 @@ module.exports.dashboard = async (req, res) => {
 
 };
 
+// render profile page
 module.exports.renderProfile = async (req, res) => {
     let id = req.params.id;
-    res.render("./pages/Employee/profile.ejs", { id });
+    res.render("./pages/Employee/Emp_profile.ejs", { id,error: false});
 };
+
 
 
 module.exports.renderLeaveApp = async (req, res) => {
