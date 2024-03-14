@@ -3,55 +3,57 @@
 <link rel="stylesheet" href="/css/profile.css">
 <div class="content">
     <div class="container mt-5">
-        <form>
+        <form method="post" action="/emp/<%= id %>/profile">
             <fieldset>
             <legend style="text-align: center; font-size: 2.5rem;">Personal Information</legend>
                     <div style="display: flex; gap: 40px;">
                         <div style="display: flex; flex-direction: column; width: 110%;">
+                            <!-- if Employee Details is avialable so display it -->
                             <label for="Employee_ID">Employee ID:</label>
-                            <input type="text" class="form-control" id="Employee_ID" name="Employee_ID" value="Give ID HERE" readonly>
+                            <input type="text" class="form-control" id="Employee_ID" name="Employee_ID" value="<%= empData[0].employeeid %>" readonly>
                             <br>
                             <div class="row mb-3">
                                 <div class="col">
                                     <label for="first_name">First Name:</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="Give First Name HERE" readonly>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="<%=empData[0].firstname %>" readonly>
                                 </div>
                                 <div class="col">
                                     <label for="last_name">Last Name:</label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name" value="Give Last Name HERE" readonly>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" value="<%= empData[0].lastname %>" readonly>
                                 </div>
                             </div>
                             <label for="Display_Name">Display Name:</label>
-                            <input type="text" class="form-control" id="Display_Name" name="Display_Name" value="Give First Name + Last Name HERE" readonly>
+                            <input type="text" class="form-control" id="Display_Name" name="Display_Name" value="<%= empData[0].firstname +" "+empData[0].lastname %>" readonly>
                             <br>
                             <div class="row ">
                                 <div class="mb-3 col-5">
                                     <label>Gender:</label><br>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="male" name="gender" value="Male">
+                                        <input class="form-check-input" type="radio" id="male" name="gender" value="Male" <%= empData[0].gender === "Male" ? 'checked' : '' %> >
                                         <label class="form-check-label" for="male">Male</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="female" name="gender" value="Female">
+                                        <input class="form-check-input" type="radio" id="female" name="gender" value="Female" <%= empData[0].gender === "female" ? 'checked' : '' %>>
                                         <label class="form-check-label" for="female">Female</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="other" name="gender" value="other">
+                                        <input class="form-check-input" type="radio" id="other" name="gender" value="other" <%= empData[0].gender === "other" ? 'checked' : '' %>>
                                         <label class="form-check-label" for="other">Other</label>
                                     </div>
                                 </div>
+                                <!-- Edit -->
                                 <div class="mb-3 col-4">
                                     <label for="date_of_birth">Date of Birth:</label>
-                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
+                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<%= empData[0].dob ? empData[0].dob.split('T')[0]  : '' %>">
                                 </div>
                             </div>
                             
                         </div>
                         <!-- Profile Picture Upload -->
-                        <div class="mb-3" style="width:30%; display: flex; justify-content: flex-end; align-items: flex-start; padding-right: 60px;">
+                        <!-- <div class="mb-3" style="width:30%; display: flex; justify-content: flex-end; align-items: flex-start; padding-right: 60px;">
                             <div>
                                 <br>
-                                <input type="file" class="form-control upload-photo" id="photo" name="photo" accept="image/*">
+                                <input type="file" class="form-control upload-photo" id="photo" name="photo">
                                 <div class="photo-container" style="display: flex; justify-content: center; align-items: center;">
                                     <label for="photo" style="cursor: pointer;">
                                         <i class="fas fa-camera fa-2x"></i><br>
@@ -59,21 +61,22 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
-                
+                <!-- Add Address -->
                 <div class="mb-3">
                     <label for="address">Address:</label>
-                    <textarea class="form-control" id="address" name="address">Address Here</textarea>
+                    <textarea placeholder="Enter Address" class="form-control"  id="address" name="address" ><%= empData[0].address  %></textarea>
                 </div>
+                <!-- Add/Edit Mobile No.  -->
                 <div class="mb-3">
                     <label for="mobile">Mobile:</label>
-                    <input type="tel" class="form-control" id="mobile" name="mobile" value="Mobile Here">
+                        <input type="tel" class="form-control" id="mobile" name="mobile" value="<%= empData[0].phone %>">
                 </div>
                 <div class="mb-3">
                     <label for="email_address">Email Address:</label>
-                    <input type="email" class="form-control" id="email_address" name="email_address" value="Email Here">
+                    <input type="email" class="form-control" id="email_address" name="email_address" value="<%=empData[0].email  %>" readonly>
                 </div>
             </fieldset>
             <br>
@@ -83,31 +86,35 @@
                 <div class="mb-3">
                     <label for="start_date">Start Date:</label>
                     <!-- <--Give date in YYYY-MM-DD format only-->
-                    <input type="date" class="form-control" id="start_date" name="start_date" value="2024-03-02" readonly>
+                    <input type="date" class="form-control" id="start_date" name="start_date" value="<%= empData[0].doj.toISOString().split('T')[0];  %>" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="position_title">Position Title:</label>
-                    <input type="text" class="form-control" id="position_title" name="position_title" value="Give Position HERE" readonly>
+                    <input type="text" class="form-control" id="position_title" name="position_title" value="<%= empData[0].position  %>" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="company_name">Company Name:</label>
-                    <input type="text" class="form-control" id="company_name" name="company_name" value="Random Company Name SGP" readonly>
+                    <input type="text" class="form-control" id="company_name" name="company_name" value="SGP" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="Department_Name">Department Name:</label>
-                    <input type="text" class="form-control" id="Department_Name" name="Department_Name" value="GIVE DEPTNAME Here" readonly>
+                    <input type="text" class="form-control" id="Department_Name" name="Department_Name" value="<%= dept[0].deptname %>" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="User_Type">User Type:</label>
-                    <input type="text" class="form-control" id="User_Type" name="User_Type" value="GIVE UserType(Admin/User) Here" readonly>
+                    <label for="User_Type">Role Type:</label>
+                    <input type="text" class="form-control" id="User_Type" name="User_Type" value="<%= role[0].rolename  %>" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="company_phone">Company Phone Number:</label>
-                    <input type="tel" class="form-control" id="company_phone" name="company_phone" value="GIVE Random No. Here" readonly>
+                    <input type="tel" class="form-control" id="company_phone" name="company_phone" value="8889997877" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="company_email">Company Email:</label>
-                    <input type="email" class="form-control" id="company_email" name="company_email" value="GIVE Random Email. Here" readonly>
+                    <input type="email" class="form-control" id="company_email" name="company_email" value="sgpemployee456@gmail.com" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="photo">Profile Photo :</label>
+                    <input type="file" class="form-control" id="photo" name="photo">
                 </div>
             </fieldset>
             <br>

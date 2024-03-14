@@ -93,7 +93,7 @@ module.exports.rejectLeave = async(req,res)=>{
     res.redirect(`/admin/${id}/leave`);
 };
 
-
+// Add a new Employee 
 module.exports.addEmployeePage = async(req, res)=>{
     let id = req.params.id;
     let Role = await db.query("SELECT INITCAP(rolename) As rolename from roles");
@@ -104,6 +104,7 @@ module.exports.addEmployeePage = async(req, res)=>{
     res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id});
 };
 
+// Add Employee Details
 module.exports.addEmployee = async(req, res)=>{
     let id = req.params.id;
     console.log(req.body)

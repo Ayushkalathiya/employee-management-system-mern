@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const pg = require("pg");
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError.js');
@@ -14,8 +15,10 @@ app.use(bodyParser.json()); // Add this line to parse JSON data
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+// app.use(express.static("public"));
 app.engine("ejs", ejsMate);
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname,"/public")));
 
 const db = new pg.Client({
     user: "postgres",

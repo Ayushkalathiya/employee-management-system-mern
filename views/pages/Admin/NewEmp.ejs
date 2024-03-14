@@ -1,5 +1,4 @@
-<% layout("./layout/admin") %>
-   
+<% layout("./layout/admin") %>   
         <div class="container mt-5 ms-1">
             <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
             <form action="/admin/<%=id%>/addEmp" method="POST">
@@ -53,6 +52,17 @@
                             required
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
                     >
+                    <!-- it will auto created as Today -->
+                    <!-- <label for="doj">Joining Date: *</label>
+                    <input
+                            type="date"
+                            id="doj"
+                            name="doj"
+                            placeholder="Enter Joining Date"
+                            required
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                    > -->
+
         
                     <label for="employeeDepartment">Department:</label>
                     <select id="employeeDepartment" name="employeeDepartment" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;">

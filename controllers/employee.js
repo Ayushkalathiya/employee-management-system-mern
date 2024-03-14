@@ -1,3 +1,4 @@
+// for postgres connection
 const pg = require("pg");
 const db = new pg.Client({
     user:  "postgres",
@@ -8,14 +9,18 @@ const db = new pg.Client({
 });
 db.connect();
 
+// Dashboard
+// Disply all leave
 module.exports.dashboard = async (req, res) => {
     id = req.params.id;
-    console.log("into empoyee route", id);
+    // console.log("into empoyee route", id);
+
+    // get all leaves
 
     // let leave =  await db.query("Select *from leaverequests where employeeid=$1",[id]);
     let leave = await db.query("SELECT * FROM leaverequests where employeeid=$1 ORDER BY CASE status WHEN 'Pending' THEN 1 WHEN 'Approve' THEN 2 WHEN 'Reject' THEN 3 ELSE 4 END ", [id]);
 
-    console.log(leave.rows);
+    // console.log(leave.rows);
     let leavereq = [];
     leave.rows.forEach((row) => {
         leavereq.push(row);
@@ -28,16 +33,76 @@ module.exports.dashboard = async (req, res) => {
 // render profile page
 module.exports.renderProfile = async (req, res) => {
     let id = req.params.id;
-    res.render("./pages/Employee/Emp_profile.ejs", { id,error: false});
+    
+   
+    
+    // get all data of employee
+    let emp = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
+    // console.log(emp.rows); 
+
+    // object data in array
+    let empData = [];
+    emp.rows.forEach((row)=>{
+        empData.push(row);
+    });
+
+    // Add one day 
+    const date = new Date(empData[0].dob);
+    date.setDate(date.getDate() + 1);
+    empData[0].dob = date.toISOString();
+
+    // get departmate name
+    let dept_name = await db.query("SELECT deptname FROM departments WHERE deptid= $1 ", [empData[0].deptid]);
+
+     // object data in array
+     let dept = dept_name.rows;
+
+    // get role name
+    let role_name = await db.query("SELECT rolename FROM roles WHERE roleid= $1 ", [empData[0].roleid]);
+    let role = role_name.rows;
+
+    res.render("./pages/Employee/Emp_profile.ejs", { id,error: false,empData,dept,role});
 };
 
+// update profile 
+module.exports.updateProfile = async (req, res) => {
+
+    let id = req.params.id;
+
+    // for read file of photo 
+    let url = req.file.path;
+    let filename = req.file.filename;
+
+    console.log(url);
+    console.log(filename);
+
+    // for read file of photo 
+    // let url = req.file.path;
+    // let filename = req.file.filename;
+    // console.log(url);
+    // get updated data
+    // mobile no, Address, DOB
+    let gender = req.body.gender;
+    let dob = req.body.date_of_birth;
+    let Address = req.body.address;
+    let Mo = req.body.mobile;
+
+    console.log("Update : " + dob);
+    
+    let emp = await db.query("UPDATE employees SET dob=$1,gender=$2,address=$3,phone=$4 WHERE employeeid=$5",[dob,gender,Address,Mo,id]);
+
+    req.flash("success","Profile updated successfully");
+    res.redirect(`/emp/${id}`);
+}
 
 
+// render leave page
 module.exports.renderLeaveApp = async (req, res) => {
     let id = req.params.id;
     res.render("./pages/Employee/leave.ejs",{id});
 };
 
+// create leave
 module.exports.createLeave = async(req,res)=>{
     
     // Today date
@@ -109,33 +174,4 @@ module.exports.createLeave = async(req,res)=>{
 
     req.flash("success", "leave added successfully");
     res.redirect(`/emp/${userId}`);
-};
-
-module.exports.addProfile =  async(req, res) => {
-    // get all from data of Emplyoee
-    const Emp_id = req.body.employeeId;
-    const F_name = req.body.firstName;
-    const L_name = req.body.lastName;
-    const Dept_name = req.body.department;
-    const finaldeptid = departments.find(dept => dept.deptname == Dept_name).DeptID;
-    const Email = req.body.email;
-    const Mo_no = req.body.mobile;
-    let userRoleToBeAdded = roles.find(role => role.roleName == userRoleToBeAdded).roleID;
-    // const country = req.body.country;
-    // const Stat = req.body.state;
-    // const City = req.body.city;
-    const DOB = req.body.dob;
-    const DOJ = req.body.doj;
-    // const Add = req.body.address;
-
-    console.log(Dept_name);
-
-    try {
-        await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,DOB,Email,Roleid,Deptid,DOJ) VALUES($1,$2,$3,$4,$5,$6,$7,$8)",
-            [Emp_id, F_name, L_name, DOB, Email, userRoleToBeAdded, finaldeptid, DOJ]);
-        res.redirect("/emp");
-    } catch (err) {
-        console.log(err);
-    }
-
 };

@@ -83,6 +83,8 @@ async function verifyResetToken(token) {
         return null;
     }
 }
+
+// formate of sending mail
 async function SendMailforReset(EmailID,Message,Subject,link){
     const reserPassTemplate = (link) => `<!DOCTYPE html>
 

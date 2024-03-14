@@ -3,9 +3,6 @@ const router = express.Router();
 const wrapAsync = require('../utils/wrapAsync.js');
 const adminController = require("../controllers/admin.js");
 
-
-
-
 router.get(
     "/:id/leave",
     wrapAsync(adminController.renderAllLeave)

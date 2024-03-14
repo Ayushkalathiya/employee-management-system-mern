@@ -44,6 +44,12 @@ Create table Employees(
 	Foreign Key(DeptID) References Departments(DeptID)
 );
 
+Create table Emp_image{
+	EmployeeID text,
+	Image_url text UNIQUE DEFAULT AS ,
+	Foreign Key(EmployeeID) References Employees(EmployeeID),
+}
+
 Create table Credentials(
 	EmployeeID text Unique NOT NULL,
 	Password text,
