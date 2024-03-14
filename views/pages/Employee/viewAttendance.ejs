@@ -1,0 +1,31 @@
+<% layout("./layout/employee") %>
+<div class="container mt-5">
+  <h2 class="text-center mb-4 fw-bolder">Your Attendance is <%=totalAttendance%>%</h2>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Sr. No.</th>
+        <th scope="col">Date</th>
+        <th scope="col">Status</th>
+    </tr>
+    </thead>  
+    <tbody>
+    <% let n=1 %>  
+    <% if (Array.isArray(AttandenceRecord)) { %>
+      <% AttandenceRecord.forEach(att => { %>
+      <tr>
+          <th scope="row"><%= n  %></th>
+          <td><%= att.date %></td>
+          <td><%= att.status %></td>
+          <% n++ %>
+      </tr>
+      <% })%>
+    <%}else{%>
+      <tr>
+          <td colspan="3">No attendance records found</td>
+      </tr>
+  <% } %>
+    </tbody>
+</table>
+</div>

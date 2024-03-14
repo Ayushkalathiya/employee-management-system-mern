@@ -279,71 +279,115 @@ module.exports.queryExportExcel= async (req, res) => {
     let employees_attendence=[];
 
     function formatDate(date) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0!
         const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
-    
-    
-    let formattedDate;
-
-    module.exports.markAttendance=async(req,res)=>{
+        return `${year}/${month}/${day}`;
+      }
+      
+      let formattedDate;
+      
+      module.exports.markAttendance = async (req, res) => {
         let id = req.params.id;
         // Get the current date
         const currentDate = new Date();
-         // Format the current date
+        // Format the current date
         formattedDate = formatDate(currentDate);
         //week ends sunday,saterday
         if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
-            res.render("./pages/weekendattendence.ejs",{id:id})
-        }else{
-            employees_attendence = await db.query("SELECT EmployeeID ,(FirstName || ' ' || LastName) as name,DeptName from Employees e LEFT JOIN Departments d ON  e.DeptID=d.DeptID where roleid = (Select roleid from roles where roleName!='admin');");
-            console.log(employees_attendence.rows);
-            res.render("./pages/admin/markAttendance.ejs",{employees:employees_attendence.rows,date:formattedDate,id});
+          res.render("./pages/weekendattendence.ejs", { id: id });
+        } else {
+          employees_attendence = await db.query(
+            "SELECT EmployeeID ,(FirstName || ' ' || LastName) as name,DeptName from Employees e LEFT JOIN Departments d ON  e.DeptID=d.DeptID where roleid = (Select roleid from roles where roleName!='admin');"
+          );
+          console.log(employees_attendence.rows);
+          res.render("./pages/admin/markAttendance.ejs", {
+            employees: employees_attendence.rows,
+            date: formattedDate,
+            id,
+          });
         }
-    };
-
-    module.exports.submitAttendance=async (req,res)=>{
+      };
+      
+      async function employeesonleave(todayDate){
+      
+        let result=await db.query(
+          "SELECT EmployeeID FROM LeaveRequests WHERE Status = 'Approve' AND EndDate>=$1",
+          [todayDate]
+        );
+      
+        return result.rows;
+      
+      }
+      
+      module.exports.submitAttendance = async (req, res) => {
         let id = req.params.id;
         console.log("Attendance");
-
-        // Get the list of all employee IDs
-        const allEmployeeIds = JSON.parse(req.body.employeeIds) || [];
-
-        // Get IDs of selected employees (those who were marked present)
-        const presentEmployeeIds = req.body.attendance || [];
-
-        // Calculate IDs of absent employees
-        const absentEmployeeIds = allEmployeeIds.filter(employeeid => !presentEmployeeIds.includes(employeeid));
-
-        // Process the selected employees and mark attendance accordingly
-        console.log('Present employees:', presentEmployeeIds);
-        console.log('Absent employees:', absentEmployeeIds);
-
+      
         // Get the current date
         const currentDate = new Date();
-         // Format the current date
-        const todayDate = formatDate(currentDate);    
-
+      
+        // Format the current date
+        const todayDate = formatDate(currentDate);
+      
+        console.log("Date :"+todayDate);
+      
+        // Get the list of all employee IDs
+        const allEmployeeIds = JSON.parse(req.body.employeeIds) || [];
+      
+        // Get IDs of selected employees (those who were marked present)
+        const presentEmployeeIds = req.body.attendance || [];
+      
+        // Calculate IDs of absent employees
+        const absentEmployeeIds = allEmployeeIds.filter(
+          (employeeid) => !presentEmployeeIds.includes(employeeid)
+        );
+      
+        //employees on leave
+        const findleaveEmployeesIds=await employeesonleave(todayDate);
+      
+        let leaveEmployeesIds = findleaveEmployeesIds.map(obj => obj.employeeid);
+      
+        let filteredabsentEmployeeIds = absentEmployeeIds.filter(element => !leaveEmployeesIds.includes(element));
+      
+        let filteredpresentEmployeeIds=presentEmployeeIds.filter(element => !leaveEmployeesIds.includes(element));
+      
+        // Process the selected employees and mark attendance accordingly
+        console.log("Present employees:", filteredpresentEmployeeIds);
+        console.log("Absent employees:", filteredabsentEmployeeIds);
+        console.log("Leave Employees:", leaveEmployeesIds);
+      
         // You can store the attendance data in the database or perform any other necessary actions here
-        const alreadyDoneAttendence=await db.query("SELECT * from attendence where date=$1;",[todayDate]);
-
+        const alreadyDoneAttendence = await db.query(
+          "SELECT * from attendence where date=$1;",
+          [todayDate]
+        );
+      
         //console.log(alreadyDoneAttendence+" sarthak "+alreadyDoneAttendence.rows.length);
-        if(alreadyDoneAttendence.rows.length == 0) {
-            //present employees
-            for (let presentEmp of presentEmployeeIds){
-                const present= await db.query("INSERT INTO attendence values($1,$2,$3);",[presentEmp,todayDate,"Present"]);
-               // console.log(present);
-            }
-            //absent employees
-            for (let absentEmp of absentEmployeeIds){
-                const absent=await db.query("INSERT INTO attendence values($1,$2,$3);",[absentEmp,todayDate,"Absent"]);
-                //console.log(absent);
-            }
-            // Redirect to the "Attendance Submitted" page
-            res.render('./pages/attendanceSubmitted',{id});
-        }else{
-            res.render('./pages/attendencealreadydone',{id});
+        if (alreadyDoneAttendence.rows.length == 0) {
+          //present employees
+          for (let presentEmp of filteredpresentEmployeeIds) {
+            const present = await db.query(
+              "INSERT INTO attendence values($1,$2,$3);",
+              [presentEmp, todayDate, "Present"]
+            );
+            console.log(present);
+          }
+          //absent employees
+          for (let absentEmp of filteredabsentEmployeeIds) {
+            const absent = await db.query(
+              "INSERT INTO attendence values($1,$2,$3);",
+              [absentEmp, todayDate, "Absent"]
+            );
+            console.log(absent);
+          }
+      
+          for (let LeaveEmp of leaveEmployeesIds){
+              const leave=await db.query("INSERT INTO attendence values($1,$2,$3);",[LeaveEmp,todayDate,"On Leave"]);
+              console.log(leave);
+          }
+          res.render("./pages/attendanceSubmitted", { id });
+        } else {
+          res.render("./pages/attendencealreadydone", { id });
         }
-    };
+      };

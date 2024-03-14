@@ -175,3 +175,34 @@ module.exports.createLeave = async(req,res)=>{
     req.flash("success", "leave added successfully");
     res.redirect(`/emp/${userId}`);
 };
+
+
+module.exports.renderAttandence = async (req, res) => {
+    id = req.params.id;
+    console.log(id);
+  
+    const Attendance = await db.query(
+      "SELECT EmployeeID, TO_CHAR(date, 'DD/MM/YYYY') AS Date, status FROM attendence where EmployeeID=$1;",
+      [id]
+    );
+  
+    console.log("Attandence :",Attendance.rows);
+  
+    let countpresent = 0;
+    let total = Attendance.rowCount;
+  
+    for (const att in Attendance) {
+      if (att.status === "Present") countpresent++;
+    }
+  
+    let totalAttendance = (countpresent / total) * 100;
+    console.log("Total Attendance: ",totalAttendance," totalPresent: ",countpresent);
+  
+    let AttandenceRecord=Attendance.rows;
+  
+    res.render("./pages/Employee/viewAttendance.ejs", {
+      id,
+      AttandenceRecord,
+      totalAttendance,
+    });
+  };

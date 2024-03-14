@@ -3,7 +3,7 @@ const app = express();
 const router = express.Router();
 const bodyParser =  require('body-parser');
 // for take image using form
-const multer = require('multer');
+ const multer = require('multer');
 // save image in cloud
 const {storage} = require('../cloudConfig.js');
 const upload = multer({storage});
@@ -36,6 +36,11 @@ router
     .get(wrapAsync(employeeController.renderLeaveApp))
     .post(wrapAsync(employeeController.createLeave));
 
+router.get(
+        "/:id/viewAttendance",
+        wrapAsync(employeeController.renderAttandence)
+    );
+    
 
 
 module.exports = router;
