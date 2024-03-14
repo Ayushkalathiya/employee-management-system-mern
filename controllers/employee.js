@@ -157,9 +157,22 @@ module.exports.createLeave = async(req,res)=>{
   
 
     // Check if leave request already exists 
-    let existingLeave = await db.query("SELECT * FROM leaverequests WHERE EmployeeID = $1 AND StartDate >= $2 AND EndDate <= $3", [userId, req.body.fromDate, req.body.toDate]);
+    //let existingLeave = await db.query("SELECT * FROM leaverequests WHERE EmployeeID = $1 AND StartDate >= $2 AND EndDate <= $3", [userId, req.body.fromDate, req.body.toDate]);
 
-    console.log();
+    let existingLeave = await db.query(`
+    SELECT *
+    FROM leaverequests
+    WHERE employeeid = $1 
+        AND (
+            (startdate <= $2 AND enddate >= $3)
+            OR
+            (startdate >= $4 AND startdate <= $5)
+            OR
+            (enddate >= $6 AND enddate <= $7)
+        );
+`, [userId, req.body.fromDate, req.body.toDate, req.body.fromDate, req.body.toDate, req.body.fromDate, req.body.toDate]);
+
+
 
     if (existingLeave.rowCount > 0) {
         req.flash("error", "Leave request already exists for this date range");
