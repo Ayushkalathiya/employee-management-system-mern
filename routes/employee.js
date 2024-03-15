@@ -5,8 +5,8 @@ const bodyParser =  require('body-parser');
 // for take image using form
  const multer = require('multer');
 // save image in cloud
-const {storage} = require('../cloudConfig.js');
-const upload = multer({storage});
+//const {storage} = require('../cloudConfig.js');
+//const upload = multer({storage});
 
 const wrapAsync = require("../utils/WrapAsync.js");
 
@@ -25,9 +25,7 @@ router.get(
 router
     .route("/:id/profile")
     .get(wrapAsync(employeeController.renderProfile))
-    .post(
-        upload.single('photo') ,
-        (employeeController.updateProfile));
+    .post((employeeController.updateProfile));
 
 
 // for leave render and add leave 
