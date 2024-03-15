@@ -1,8 +1,10 @@
 const pg = require("pg");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const { Workbook } = require('exceljs');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const PDFDocument = require('pdfkit');
+const { log } = require("console");
 
 
 const db = new pg.Client({
@@ -139,6 +141,119 @@ module.exports.addEmployee = async(req, res)=>{
 
     bcrypt.hash(EmpID, saltRounds, async (err, hash)=> {
         await db.query("Insert into Credentials values($1,$2)",[EmpID,hash])
+    });
+    const empAdder = await db.query("SELECT FirstName || ' ' || LastName AS Name, Position from Employees where employeeid = $1",[id]);
+    const adderName = empAdder.rows;
+    console.log(adderName)
+
+    const joinTemplate = (ENAME,EmployeeID,Name,Position) =>`<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Team!</title>
+    <style>
+        /* Reset styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        /* Container styles */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        /* Header styles */
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            color: #333;
+        }
+        /* Message styles */
+        .message {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .message p {
+            color: #333;
+        }
+        /* Footer styles */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer p {
+            color: #666;
+        }
+        /* Button styles */
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Our Team!</h1>
+        </div>
+        <div class="message">
+            <p>Dear ${ENAME},</p>
+            <p>Welcome to SGP-EMS! We're thrilled to have you join our team.</p>
+            <p>Below are your login credentials:</p>
+            <ul>
+                <li><strong>Employee ID:</strong> ${EmployeeID}</li>
+                <li><strong>Password:</strong> ${EmployeeID}</li>
+            </ul>
+            <p>You can access our system by clicking the link below:</p>
+            <p><a href="http://localhost:3000/" class="button" style="color: white;">Access Our System</a></p>
+            <p>As you embark on this new journey with us, we hope you find fulfillment, growth, and meaningful connections.</p>
+            <p>Don't hesitate to reach out if you have any questions or need assistance settling in.</p>
+            <p>Once again, welcome aboard!</p>
+            <p>Sincerely,</p>
+            <p>${Name}<br>${Position}<br>SGP-EMS</p>
+        </div>
+        <div class="footer">
+            <p>This email was automatically generated. Please do not reply.</p>
+        </div>
+    </div>
+    </body>
+    </html>    
+`
+const EMNAME = EmpFName+' '+EmpLName
+console.log(EMNAME);
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD,
+        }
+    });
+    
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: EmpEmail,
+        subject: 'Congratulations!!!',
+        text: "Congratulations",
+        html: joinTemplate(EMNAME,EmpID,adderName[0].name,adderName[0].position)
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
     });
     res.redirect(`/admin/${id}/addEmp`);
 };
