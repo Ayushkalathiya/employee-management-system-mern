@@ -44,6 +44,70 @@ async function checkExistence(employeeID) {
     }
   }
 
+  // render profile page
+module.exports.renderProfile = async (req, res) => {
+    let id = req.params.id;
+    
+    // get all data of employee
+    let emp = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
+    // console.log(emp.rows); 
+
+    // object data in array
+    let empData = [];
+    emp.rows.forEach((row)=>{
+        empData.push(row);
+    });
+
+    // Add one day 
+    const date = new Date(empData[0].dob);
+    date.setDate(date.getDate() + 1);
+    empData[0].dob = date.toISOString();
+
+    // get departmate name
+    let dept_name = await db.query("SELECT deptname FROM departments WHERE deptid= $1 ", [empData[0].deptid]);
+
+     // object data in array
+     let dept = dept_name.rows;
+
+    // get role name
+    let role_name = await db.query("SELECT rolename FROM roles WHERE roleid= $1 ", [empData[0].roleid]);
+    let role = role_name.rows;
+
+    res.render("./pages/Admin/profile.ejs", { id,error: false,empData,dept,role});
+};
+
+// update profile 
+module.exports.updateProfile = async (req, res) => {
+
+    let id = req.params.id;
+
+    // for read file of photo 
+    // let url = req.file.path;
+    // let filename = req.file.filename;
+
+    // console.log(url);
+    // console.log(filename);
+
+    // for read file of photo 
+    // let url = req.file.path;
+    // let filename = req.file.filename;
+    // console.log(url);
+    // get updated data
+    // mobile no, Address, DOB
+    let gender = req.body.gender;
+    let dob = req.body.date_of_birth;
+    let Address = req.body.address;
+    let Mo = req.body.mobile;
+
+    console.log("Update : " + dob);
+    
+    let emp = await db.query("UPDATE employees SET dob=$1,gender=$2,address=$3,phone=$4 WHERE employeeid=$5",[dob,gender,Address,Mo,id]);
+
+    req.flash("success","Profile updated successfully");
+    res.redirect(`/admin/${id}/profile`);
+}
+
+
 
 // render All Employee Leave
 module.exports.renderAllLeave = async(req, res)=>{

@@ -8,6 +8,12 @@ router.get(
     wrapAsync(adminController.renderAllLeave)
 );
 
+// for profile -> render and add profile
+router
+    .route("/:id/profile")
+    .get(wrapAsync(adminController.renderProfile))
+    .post((adminController.updateProfile));
+
 // view leave requests
 router.get(
     "/:id/leave/view/:leaveid",
