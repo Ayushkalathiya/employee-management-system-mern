@@ -224,7 +224,7 @@ module.exports.renderAttandence = async (req, res) => {
       if(att.status == "Present") countpresent++;
     }
   
-    let totalAttendance = (countpresent / total) * 100;
+    let totalAttendance = Math.round((countpresent / total) * 100);
     console.log("Total Attendance: ",totalAttendance," totalPresent: ",countpresent);
 
     let colorpercentage =calculateColor(totalAttendance);
