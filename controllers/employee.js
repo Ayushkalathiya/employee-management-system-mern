@@ -200,18 +200,18 @@ module.exports.renderAttandence = async (req, res) => {
     );
   
     console.log("Attandence :",Attendance.rows);
-  
+        
     let countpresent = 0;
     let total = Attendance.rowCount;
+    const AttandenceRecord = Attendance.rows;
   
-    for (const att in Attendance) {
+    for (const att in AttandenceRecord) {
       if (att.status === "Present") countpresent++;
     }
   
     let totalAttendance = (countpresent / total) * 100;
     console.log("Total Attendance: ",totalAttendance," totalPresent: ",countpresent);
   
-    let AttandenceRecord=Attendance.rows;
   
     res.render("./pages/Employee/viewAttendance.ejs", {
       id,
