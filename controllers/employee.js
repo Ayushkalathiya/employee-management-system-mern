@@ -217,10 +217,11 @@ module.exports.renderAttandence = async (req, res) => {
         
     let countpresent = 0;
     let total = Attendance.rowCount;
+
     const AttandenceRecord = Attendance.rows;
   
-    for (const att in AttandenceRecord) {
-      if (att.status === "Present") countpresent++;
+    for (const att of AttandenceRecord) {
+      if(att.status == "Present") countpresent++;
     }
   
     let totalAttendance = (countpresent / total) * 100;
