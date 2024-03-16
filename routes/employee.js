@@ -25,7 +25,7 @@ router.get(
 router
     .route("/:id/profile")
     .get(wrapAsync(employeeController.renderProfile))
-    .post((employeeController.updateProfile));
+    //.post((employeeController.updateProfile));
 
 
 // for leave render and add leave 

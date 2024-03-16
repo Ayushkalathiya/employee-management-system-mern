@@ -189,6 +189,20 @@ module.exports.createLeave = async(req,res)=>{
     res.redirect(`/emp/${userId}`);
 };
 
+function calculateColor(totalAttendance) {
+    let color;
+    if (totalAttendance >= 90) {
+      color = 'green'; // Green for 90-100%
+    } else if (totalAttendance >= 20) {
+      // Interpolate between yellow and red based on percentage
+      let red = Math.round((1 - (totalAttendance - 20) / 70) * 255);
+      color = `rgb(255, ${red}, 0)`;
+    } else {
+      color = 'red'; // Red for 0-20%
+    }
+    return color;
+  }
+
 
 module.exports.renderAttandence = async (req, res) => {
     id = req.params.id;
@@ -204,12 +218,14 @@ module.exports.renderAttandence = async (req, res) => {
     let countpresent = 0;
     let total = Attendance.rowCount;
   
-    for (const att in Attendance) {
-      if (att.status === "Present") countpresent++;
+    for (const att of Attendance.rows) {
+      if (att.status == "Present") countpresent++;
     }
   
     let totalAttendance = (countpresent / total) * 100;
     console.log("Total Attendance: ",totalAttendance," totalPresent: ",countpresent);
+
+    let colorpercentage =calculateColor(totalAttendance);
   
     let AttandenceRecord=Attendance.rows;
   
@@ -217,5 +233,6 @@ module.exports.renderAttandence = async (req, res) => {
       id,
       AttandenceRecord,
       totalAttendance,
+      colorpercentage,
     });
   };
