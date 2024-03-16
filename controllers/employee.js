@@ -214,12 +214,13 @@ module.exports.renderAttandence = async (req, res) => {
     );
   
     console.log("Attandence :",Attendance.rows);
-  
+        
     let countpresent = 0;
     let total = Attendance.rowCount;
+    const AttandenceRecord = Attendance.rows;
   
-    for (const att of Attendance.rows) {
-      if (att.status == "Present") countpresent++;
+    for (const att in AttandenceRecord) {
+      if (att.status === "Present") countpresent++;
     }
   
     let totalAttendance = (countpresent / total) * 100;
@@ -227,7 +228,6 @@ module.exports.renderAttandence = async (req, res) => {
 
     let colorpercentage =calculateColor(totalAttendance);
   
-    let AttandenceRecord=Attendance.rows;
   
     res.render("./pages/Employee/viewAttendance.ejs", {
       id,
