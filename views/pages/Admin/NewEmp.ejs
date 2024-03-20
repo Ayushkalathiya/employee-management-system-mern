@@ -1,7 +1,7 @@
-<% layout("./layout/admin") %>   
+ <% layout("./layout/admin") %>   
         <div class="container mt-5 ms-1">
             <h1 style="text-align: center; font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">New Employee Details</h1>
-            <form action="/admin/<%=id%>/addEmp" method="POST">
+            <form action="/admin/<%=id%>/addEmp" method="POST" class="needs-validation" novalidate>
                 <section style="margin-top: 20px;">
                     <label for="employeeID">Employee ID: *</label>
                     <input
@@ -12,46 +12,72 @@
                             required
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 0.5rem;"
                     >
+                    <div class="invalid-feedback mb-3">Please Enter EmployeeID.</div>
                     <div id="employeeIDStatus" style="font-size: 14px; color: red; margin-bottom: 0.5rem;">Please Enter A Employee ID!</div>
-                    <label for="employeeFName">Employee First Name: *</label>
-                    <input
+                    <!-- first name -->
+                    <div class="form-group">
+                        <label for="employeeFName">Employee First Name: *</label>
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="employeeFName"
+                                name="employeeFName"
+                                placeholder="Enter First name"
+                                required
+                                style="display: inline-block; width: 100%; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px;"
+                        >
+                        <div class="invalid-feedback mb-3" style="margin-top: -1%;">Please Enter Valid First Name.</div>
+                        </div>  
+                    </div>
+
+                   <!-- last name -->
+                    <div class="form-group">
+                        <label for="employeeLName">Employee Last Name: *</label>
+                        <div class="input-group">
+                            <input
                             type="text"
-                            id="employeeFName"
-                            name="employeeFName"
-                            placeholder="Enter First name"
-                            required
-                            style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px; margin-bottom: 1rem;"
-                    >
-                    <label for="employeeLName">Employee Last Name: *</label>
-                    <input
-                            type="text"
+                            class="form-control"
                             id="employeeLName"
                             name="employeeLName"
                             placeholder="Enter Last name"
                             required
                             style="display: inline-block; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-                    >
-                    <br>
+                        >
+                        <div class="invalid-feedback mb-3" style="margin-top: -1%;">Please Enter Valid Last Name.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employeePosition">Position: *</label>
+                        <div class="input-group">
+                            <input
+                                    type="text"
+                                    id="employeePosition"
+                                    class="form-control"
+                                    name="employeePosition"
+                                    placeholder="Enter position"
+                                    required
+                                    style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                            >
+                            <div class="invalid-feedback" style="margin-top: -1%;">Please Enter Valid Employee Position.</div>
+                        </div>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="employeeEmail">Email ID: *</label>
+                        <div class="input-group"></div>
+                        <input
+                                type="Email"
+                                id="employeeEmail"
+                                name="employeeEmail"
+                                placeholder="Enter Employee Email ID"
+                                required
+                                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
+                        >
+                        <div class="invalid-feedback mb-3" style="margin-top: -1%;">Please Enter Valid Employee Email Id.</div>
+                    </div>
         
-                    <label for="employeePosition">Position: *</label>
-                    <input
-                            type="text"
-                            id="employeePosition"
-                            name="employeePosition"
-                            placeholder="Enter position"
-                            required
-                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-                    >
-        
-                    <label for="employeeEmail">Email ID: *</label>
-                    <input
-                            type="Email"
-                            id="employeeEmail"
-                            name="employeeEmail"
-                            placeholder="Enter Employee Email ID"
-                            required
-                            style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-                    >
                     <!-- it will auto created as Today -->
                     <!-- <label for="doj">Joining Date: *</label>
                     <input
@@ -80,15 +106,23 @@
                         <% } %>
                     </select>
         
-                    <label for="employeeSal">Salary: *</label>
-                    <input
+                    <div class="form-group">
+                        <label for="employeeSal">Salary: *</label>
+                        <div class="input-group">
+                            <input
                             type="number"
                             id="employeeSal"
+                            class="form-control"
                             name="employeeSal"
                             placeholder="Enter Employee Salary"
                             required
                             style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem;"
-                    >
+                            >
+                            <div class="invalid-feedback mb-3" style="margin-top: -1%;">Please Enter Valid Employee Salary.</div>
+                        </div>
+                    </div>
+
+                    
                     <button type="submit" style="background-color: gray; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;" id="submit" disabled>Add Employee</button>
                 </section>
             </form>
@@ -147,6 +181,9 @@
                 }
             }
 </script>
+
+
+
 <!--     
      <script>
         const socket = new WebSocket('ws://localhost:8080');

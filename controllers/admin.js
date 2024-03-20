@@ -486,7 +486,7 @@ module.exports.queryExportExcel= async (req, res) => {
             date: formattedDate,
             id,
           });
-        //}
+        // }
       };
       
       async function employeesonleave(todayDate){
