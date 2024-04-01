@@ -5,6 +5,7 @@ const { Workbook } = require('exceljs');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const PDFDocument = require('pdfkit');
 const { log } = require("console");
+const jwt = require('jsonwebtoken');
 
 
 const db = new pg.Client({
@@ -30,6 +31,23 @@ async function main(){
     
 }
 main()
+
+async function generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal) {
+    const token = jwt.sign({ EmpID: EmpID,EmpFName: EmpFName,EmpLName:EmpLName,EmpEmail: EmpEmail,
+        roleID: roleID,EmpPosition: EmpPosition,EmpSal: EmpSal}, process.env.JWT_SECRET); 
+    return token;
+}
+
+async function verifyEmployeeToken(token) {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(decoded)
+        return decoded;
+    } catch (error) {
+        console.error('Token verification failed:', error);
+        return null;
+    }
+}
 
 // Assuming you have a function to check if an employee ID exists in your database
 async function checkExistence(employeeID) {
@@ -188,6 +206,9 @@ module.exports.addEmployee = async(req, res)=>{
 
     let EmpSal = req.body.employeeSal*1;
     let EmpDepartment = req.body.employeeDepartment;
+
+    const token = generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal)
+
     if(EmpDepartment === "NULL"){
         (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
         [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
