@@ -149,9 +149,10 @@ padding: 20px;
       overflow: hidden;
       text-align: center;
   }
-  .photo-container img {
-      max-width: 100%;
-      max-height: 100%;
+  .photo-container-img img{
+      width: 180px;
+      height: 180px;
+      border-radius: 20%;
   }
   .upload-photo {
       display: none;
