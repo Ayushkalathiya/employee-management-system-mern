@@ -32,9 +32,9 @@ async function main(){
 }
 main()
 
-async function generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal) {
+async function generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal,EmpDepartment) {
     const token = await jwt.sign({ EmpID: EmpID,EmpFName: EmpFName,EmpLName:EmpLName,EmpEmail: EmpEmail,
-        roleID: roleID,EmpPosition: EmpPosition,EmpSal: EmpSal}, process.env.JWT_SECRET); 
+        roleID: roleID,EmpPosition: EmpPosition,EmpSal: EmpSal,EmpDepartment: EmpDepartment}, process.env.JWT_SECRET); 
     return token;
 }
 
@@ -70,15 +70,16 @@ module.exports.renderProfile = async (req, res) => {
     // get all data of employee
     let emp = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
     // console.log(emp.rows); 
-    // get all data of employee
-    let emp1 = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
-    let img = await db.query("SELECT image_url FROM emp_image WHERE employeeid=$1",[id]);
-    // console.log(emp.rows);
-    if(img.rowCount == 0) {
-        img = null;
-    }else{
-        img = img.rows[0].image_url;
-    } 
+        // get all data of employee
+        let emp1 = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
+        let img = await db.query("SELECT image_url FROM emp_image WHERE employeeid=$1",[id]);
+        // console.log(emp.rows);
+        if(img.rowCount == 0) {
+            img = null;
+        }else{
+            img = img.rows[0].image_url;
+        } 
+    
 
     // object data in array
     let empData = [];
@@ -198,6 +199,7 @@ module.exports.addEmployeePage = async(req, res)=>{
     res.render("./pages/admin/NewEmp.ejs",{Role:roles , Dept: Deptartments,id});
 };
 
+
 // Add Employee Details
 module.exports.addEmployee = async(req, res)=>{
     let id = req.params.id;
@@ -217,117 +219,63 @@ module.exports.addEmployee = async(req, res)=>{
     let EmpSal = req.body.employeeSal*1;
     let EmpDepartment = req.body.employeeDepartment;
 
-    const token = await generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal)
-    const decoded = await verifyEmployeeToken(token)
+    const token = await generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal,EmpDepartment);
+    const link = `http://localhost:3000/verify-email/`+token
 
-    if(EmpDepartment === "NULL"){
-        (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
-        [EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal]))
-    }
-    else{
-        let DeptArray = await db.query("SELECT deptid from departments where deptname=$1",[EmpDepartment]);
-        let dept = DeptArray.rows;
-        let deptID = dept[0].deptid ;
-        (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,$6,NOW(),$7,$8)",
-        [EmpID,EmpFName,EmpLName,EmpEmail,roleID,deptID,EmpPosition,EmpSal]))
-    }
-    
-
-    const saltRounds = 10;
-
-    bcrypt.hash(EmpID, saltRounds, async (err, hash)=> {
-        await db.query("Insert into Credentials values($1,$2)",[EmpID,hash])
-    });
-    const empAdder = await db.query("SELECT FirstName || ' ' || LastName AS Name, Position from Employees where employeeid = $1",[id]);
-    const adderName = empAdder.rows;
-    console.log(adderName)
-
-    const joinTemplate = (ENAME,EmployeeID,Name,Position) =>`<!DOCTYPE html>
-    <html lang="en">
-    <head>
+    const joinTemplate = (link) =>`
+    <!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Our Team!</title>
+    <title>Email Verification</title>
     <style>
-        /* Reset styles */
-        body, html {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
         }
-        /* Container styles */
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
-            background-color: #f9f9f9;
-        }
-        /* Header styles */
-        .header {
-            text-align: center;
-            padding-bottom: 20px;
-        }
-        .header h1 {
-            color: #333;
-        }
-        /* Message styles */
-        .message {
             background-color: #fff;
-            padding: 20px;
             border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .message p {
+        h2 {
             color: #333;
         }
-        /* Footer styles */
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .footer p {
+        p {
             color: #666;
         }
-        /* Button styles */
-        .button {
+        .btn {
             display: inline-block;
-            padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
+            padding: 10px 20px;
             border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
         }
     </style>
-    </head>
-    <body>
+</head>
+<body>
     <div class="container">
-        <div class="header">
-            <h1>Welcome to Our Team!</h1>
-        </div>
-        <div class="message">
-            <p>Dear ${ENAME},</p>
-            <p>Welcome to SGP-EMS! We're thrilled to have you join our team.</p>
-            <p>Below are your login credentials:</p>
-            <ul>
-                <li><strong>Employee ID:</strong> ${EmployeeID}</li>
-                <li><strong>Password:</strong> ${EmployeeID}</li>
-            </ul>
-            <p>You can access our system by clicking the link below:</p>
-            <p><a href="http://localhost:3000/" class="button" style="color: white;">Access Our System</a></p>
-            <p>As you embark on this new journey with us, we hope you find fulfillment, growth, and meaningful connections.</p>
-            <p>Don't hesitate to reach out if you have any questions or need assistance settling in.</p>
-            <p>Once again, welcome aboard!</p>
-            <p>Sincerely,</p>
-            <p>${Name}<br>${Position}<br>SGP-EMS</p>
-        </div>
-        <div class="footer">
-            <p>This email was automatically generated. Please do not reply.</p>
-        </div>
+        <h2>Email Verification</h2>
+        <p>Hello,</p>
+        <p>Please click the button below to verify your email address:</p>
+        <a href="${link}" class="btn">Verify Email</a>
+        <p>If you didn't request this, you can safely ignore this email.</p>
+        <p>Thanks,<br/>SGP Employee Management System</p>
     </div>
-    </body>
-    </html>    
+</body>
+</html>
 `
-const EMNAME = EmpFName+' '+EmpLName
-console.log(EMNAME);
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -339,9 +287,9 @@ console.log(EMNAME);
     const mailOptions = {
         from: process.env.EMAIL,
         to: EmpEmail,
-        subject: 'Congratulations!!!',
-        text: "Congratulations",
-        html: joinTemplate(EMNAME,EmpID,adderName[0].name,adderName[0].position)
+        subject: 'Verify Email',
+        text: "Verify Email",
+        html: joinTemplate(link)
     };
     
     transporter.sendMail(mailOptions, function(error, info){
@@ -351,6 +299,8 @@ console.log(EMNAME);
             console.log('Email sent: ' + info.response);
         }
     });
+    
+
     res.redirect(`/admin/${id}/addEmp`);
 };
 

@@ -25,6 +25,10 @@ router.get(
     (loginContoller.resetPasswordToken)
 );
 
+router.get(
+    "/verify-email/:token",
+    (loginContoller.verifyEmail)
+);
 
 router.get("/final", (req, res) => {
     //For normal User
