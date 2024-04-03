@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const wrapAsync = require('../utils/wrapAsync.js');
 const adminController = require("../controllers/admin.js");
+// for take image using form
+const multer = require('multer');
+// save image in cloud
+const {storage} = require('../cloudConfig.js');
+const upload = multer({storage});
 
 router.get(
     "/:id/leave",
@@ -12,7 +17,7 @@ router.get(
 router
     .route("/:id/profile")
     .get(wrapAsync(adminController.renderProfile))
-    .post((adminController.updateProfile));
+    .post(upload.single('photo'),wrapAsync(adminController.updateProfile));
 
 // view leave requests
 router.get(

@@ -38,7 +38,15 @@ module.exports.renderProfile = async (req, res) => {
     
     // get all data of employee
     let emp = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
-    // console.log(emp.rows); 
+    let img = await db.query("SELECT image_url FROM emp_image WHERE employeeid=$1",[id]);
+    // console.log(emp.rows);
+    if(img.rowCount == 0) {
+        img = null;
+    }else{
+        img = img.rows[0].image_url;
+    } 
+
+    console.log(img);
 
     // object data in array
     let empData = [];
@@ -61,7 +69,7 @@ module.exports.renderProfile = async (req, res) => {
     let role_name = await db.query("SELECT rolename FROM roles WHERE roleid= $1 ", [empData[0].roleid]);
     let role = role_name.rows;
 
-    res.render("./pages/Employee/Emp_profile.ejs", { id,error: false,empData,dept,role});
+    res.render("./pages/Employee/Emp_profile.ejs", { id,error: false,empData,dept,role,img});
 };
 
 // update profile 
@@ -71,10 +79,12 @@ module.exports.updateProfile = async (req, res) => {
 
     // for read file of photo 
     let url = req.file.path;
-    let filename = req.file.filename;
+    // let filename = req.file.filename;
 
+    // console.log("Url : " + url);
     console.log(url);
-    console.log(filename);
+    // console.log(req.body);
+    // console.log(filename);
 
     // for read file of photo 
     // let url = req.file.path;
@@ -90,6 +100,9 @@ module.exports.updateProfile = async (req, res) => {
     console.log("Update : " + dob);
     
     let emp = await db.query("UPDATE employees SET dob=$1,gender=$2,address=$3,phone=$4 WHERE employeeid=$5",[dob,gender,Address,Mo,id]);
+    let dl = await db.query("DELETE FROM emp_image WHERE employeeid=$1",[id]);
+    let emp_img = await db.query("insert into emp_image values($1,$2)",[id,url]);
+    // let img = await db.query("update EMP_IMAGE set image_url=$1 WHERE employeeid=$2",[url,id]);
 
     req.flash("success","Profile updated successfully");
     res.redirect(`/emp/${id}`);

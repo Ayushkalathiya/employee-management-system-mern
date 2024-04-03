@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/css/profile.css">
 <div class="content">
     <div class="container mt-5">
-        <form method="post" action="/admin/<%= id %>/profile">
+        <form method="post" action="/admin/<%= id %>/profile" enctype="multipart/form-data">
             <fieldset>
             <legend style="text-align: center; font-size: 2.5rem;">Personal Information</legend>
                     <div style="display: flex; gap: 40px;">
@@ -50,18 +50,32 @@
                             
                         </div>
                         <!-- Profile Picture Upload -->
-                        <!-- <div class="mb-3" style="width:30%; display: flex; justify-content: flex-end; align-items: flex-start; padding-right: 60px;">
-                            <div>
-                                <br>
-                                <input type="file" class="form-control upload-photo" id="photo" name="photo">
-                                <div class="photo-container" style="display: flex; justify-content: center; align-items: center;">
-                                    <label for="photo" style="cursor: pointer;">
-                                        <i class="fas fa-camera fa-2x"></i><br>
-                                        Click to upload
-                                    </label>
+                        <% if(img === null){ %>
+                            <div class="mb-3" style="width:30%; display: flex; justify-content: flex-end; align-items: flex-start; padding-right: 60px;">
+                                <div>
+                                    <br>
+                                    <input 
+                                        type="file" 
+                                        name="photo"
+                                        id="photo" 
+                                        class="form-control upload-photo" 
+                                    >
+                                    <div class="photo-container" style="display: flex; justify-content: center; align-items: center;">
+                                        <label for="photo" style="cursor: pointer;">
+                                                <i class="fas fa-camera fa-2x"></i><br>
+                                                Click to upload 
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div> -->
+                                <% } else { %>
+                                <div class="photo-container" style="border: none ; width: 200px;">        
+                                    <img src="<%= img %>">
+                                </div>
+                        <% } %>
+                                   
+                            <!-- </div> -->
+                        </div>
                     </div>
 
                 <!-- Add Address -->

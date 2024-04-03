@@ -51,6 +51,15 @@ module.exports.renderProfile = async (req, res) => {
     // get all data of employee
     let emp = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
     // console.log(emp.rows); 
+    // get all data of employee
+    let emp1 = await db.query("SELECT *FROM employees where employeeid=$1",[id]);
+    let img = await db.query("SELECT image_url FROM emp_image WHERE employeeid=$1",[id]);
+    // console.log(emp.rows);
+    if(img.rowCount == 0) {
+        img = null;
+    }else{
+        img = img.rows[0].image_url;
+    } 
 
     // object data in array
     let empData = [];
@@ -73,7 +82,7 @@ module.exports.renderProfile = async (req, res) => {
     let role_name = await db.query("SELECT rolename FROM roles WHERE roleid= $1 ", [empData[0].roleid]);
     let role = role_name.rows;
 
-    res.render("./pages/Admin/profile.ejs", { id,error: false,empData,dept,role});
+    res.render("./pages/Admin/profile.ejs", { id,error: false,empData,dept,role,img});
 };
 
 // update profile 
