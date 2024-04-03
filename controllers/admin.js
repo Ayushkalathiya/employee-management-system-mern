@@ -33,12 +33,13 @@ async function main(){
 main()
 
 async function generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal) {
-    const token = jwt.sign({ EmpID: EmpID,EmpFName: EmpFName,EmpLName:EmpLName,EmpEmail: EmpEmail,
+    const token = await jwt.sign({ EmpID: EmpID,EmpFName: EmpFName,EmpLName:EmpLName,EmpEmail: EmpEmail,
         roleID: roleID,EmpPosition: EmpPosition,EmpSal: EmpSal}, process.env.JWT_SECRET); 
     return token;
 }
 
 async function verifyEmployeeToken(token) {
+    console.log("The provided Token is:"+token)
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log(decoded)
@@ -207,7 +208,8 @@ module.exports.addEmployee = async(req, res)=>{
     let EmpSal = req.body.employeeSal*1;
     let EmpDepartment = req.body.employeeDepartment;
 
-    const token = generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal)
+    const token = await generateEmployeeToken(EmpID,EmpFName,EmpLName,EmpEmail,roleID,EmpPosition,EmpSal)
+    const decoded = await verifyEmployeeToken(token)
 
     if(EmpDepartment === "NULL"){
         (await db.query("INSERT INTO employees (EmployeeID,FirstName,LastName,Email,Roleid,Deptid,DOJ,Position,Salary) VALUES($1,$2,$3,$4,$5,NULL,NOW(),$6,$7)",
