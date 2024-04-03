@@ -1,8 +1,15 @@
 <% layout("./layout/admin") %>
   <div class="sarthakquerypage">
-  <form  action="/admin/<%= id %>/query/add" method="post" id="myForm">
-    <input type="text" id="query" name="query" placeholder="Enter the query" autocomplete="off" autofocus="true" required>
-    <button class="add" type="submit" name="list" id="query_Submit">Submit</button>
+  <form  action="/admin/<%= id %>/query/add" method="post" id="myForm" style="display: flex;">
+    <div>
+      <input type="text" id="query" name="query" placeholder="Enter the query" autocomplete="off" autofocus="true" style="width: 500px;" required>
+      <%if(promptcheck=="false"){%>
+        <div style="color: red; margin-left: 500px;"> Invalid Prompt </div>
+      <%}%>
+    </div>
+    <div>
+      <button class="add" type="submit" name="list" id="query_Submit" style="justify-self: center; margin-top: 10px;">Submit</button>
+    </div>
   </form>
   </div>
 <%if(answer.length>0){%>
