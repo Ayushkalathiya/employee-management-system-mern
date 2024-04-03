@@ -105,7 +105,7 @@ module.exports.updateProfile = async (req, res) => {
     // let img = await db.query("update EMP_IMAGE set image_url=$1 WHERE employeeid=$2",[url,id]);
 
     req.flash("success","Profile updated successfully");
-    res.redirect(`/emp/${id}`);
+    res.redirect(`/emp/${id}/profile`);
 }
 
 

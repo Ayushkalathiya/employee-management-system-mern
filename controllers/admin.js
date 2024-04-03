@@ -111,7 +111,7 @@ module.exports.updateProfile = async (req, res) => {
     let id = req.params.id;
 
     // for read file of photo 
-    // let url = req.file.path;
+    let url = req.file.path;
     // let filename = req.file.filename;
 
     // console.log(url);
@@ -131,6 +131,8 @@ module.exports.updateProfile = async (req, res) => {
     console.log("Update : " + dob);
     
     let emp = await db.query("UPDATE employees SET dob=$1,gender=$2,address=$3,phone=$4 WHERE employeeid=$5",[dob,gender,Address,Mo,id]);
+    let dl = await db.query("DELETE FROM emp_image WHERE employeeid=$1",[id]);
+    let emp_img = await db.query("insert into emp_image values($1,$2)",[id,url]);
 
     req.flash("success","Profile updated successfully");
     res.redirect(`/admin/${id}/profile`);
