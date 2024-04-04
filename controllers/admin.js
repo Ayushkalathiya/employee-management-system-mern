@@ -637,3 +637,12 @@ module.exports.submitAttendance = async (req, res) => {
     res.render("./pages/attendencealreadydone", { id });
   }
 };
+
+let allemployees=[];
+
+module.exports.dashboard=async(req,res)=>{
+  let id = req.params.id;
+  allemployees=await db.query(`Select * from Employees`);
+  console.log("\n\n\n\n\n\nSarthak   ",allemployees);
+  res.render("./pages/Admin/admindashboard.ejs", { allemployees:allemployees.rows, id});
+};

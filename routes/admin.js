@@ -87,4 +87,9 @@ router.post(
     wrapAsync(adminController.submitAttendance)
 )
 
+router.get(
+    "/:id/dashboard",
+    wrapAsync(adminController.dashboard)
+)
+
 module.exports = router;

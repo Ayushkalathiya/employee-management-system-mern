@@ -1,0 +1,21 @@
+<% layout("./layout/admin") %>
+<h1 class="mt-5 center fw-bolder">Details Of all Employees</h1>
+<div class="center" id="table-id" style="margin-top:20px;" ><!--hidden class-->
+  <table>
+    <%let i=0;%>
+    <%for(let object of allemployees){%>
+      <%if(i==0){i=1;%>
+      <tr>
+        <%for(let key in object){%>
+        <th><%=key%></th>
+        <%}%>
+      </tr>
+      <%}%>
+      <tr>
+        <%for(let key in object){%>
+        <td><%=object[key]%></td>
+        <%}%>
+      </tr>
+    <%}%>
+  </table>
+  </div>
