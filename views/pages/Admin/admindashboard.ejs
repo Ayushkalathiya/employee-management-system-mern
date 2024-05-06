@@ -1,21 +1,32 @@
 <% layout("./layout/admin") %>
-<h1 class="mt-5 center fw-bolder">Details Of all Employees</h1>
-<div class="center" id="table-id" style="margin-top:20px;" ><!--hidden class-->
-  <table>
-    <%let i=0;%>
-    <%for(let object of allemployees){%>
-      <%if(i==0){i=1;%>
-      <tr>
-        <%for(let key in object){%>
-        <th><%=key%></th>
-        <%}%>
-      </tr>
-      <%}%>
-      <tr>
-        <%for(let key in object){%>
-        <td><%=object[key]%></td>
-        <%}%>
-      </tr>
-    <%}%>
-  </table>
-  </div>
+<div class="container mt-5">
+    <h1 class="text-center mb-4 fw-bolder">Employee's Details</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Sr. No.</th>
+          <th scope="col">Emp ID</th>
+          <th scope="col">Emp Name</th>
+          <th scope="col">Dept Name</th>
+          <th scope="col">Action</th>
+        </tr>
+        <tbody>
+          <% let n = 1 %>
+          <% for (let emp of allemployees) { %>
+          <tr>
+            <th scope="row"><%= n %></th>
+            <td><%= emp.employeeid %></td>
+            <td><%= emp.firstname + " " + emp.lastname %></td>
+            <td><%= emp.deptname %></td>
+            <td class="flex-nowrap bd-highlight">
+              <form method="GET" action="/admin/<%= id %>/dashboard/view/<%= emp.employeeid %>">
+                <button type="submit" class="btn btn-primary ms-2">View Details</button>
+              </form>
+            </td>
+          </tr>
+          <% n++ %>
+          <% } %>
+        </tbody>
+      </thead>
+    </table>
+</div>

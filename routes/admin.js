@@ -92,4 +92,14 @@ router.get(
     wrapAsync(adminController.dashboard)
 )
 
+router.get(
+    "/:id/dashboard/view/:empid",
+    wrapAsync(adminController.dashboardViewEmp)
+)
+
+router.post(
+    "/:id/dashboard/view/:empid",
+    wrapAsync(adminController.dashboardDeleteEmp)
+)
+
 module.exports = router;

@@ -47,13 +47,12 @@ Create table Employees(
 Create table Emp_image(
 	EmployeeID text,
 	Image_url text UNIQUE,
-	Foreign Key(EmployeeID) References Employees(EmployeeID)
+	Foreign Key(EmployeeID) References Employees(EmployeeID) ON DELETE CASCADE
 );
-
 Create table Credentials(
 	EmployeeID text Unique NOT NULL,
 	Password text,
-	Foreign Key(EmployeeID) References Employees(EmployeeID)
+	Foreign Key(EmployeeID) References Employees(EmployeeID) ON DELETE CASCADE
 );
 
 create table LeaveRequests(
@@ -66,12 +65,12 @@ create table LeaveRequests(
 	Status text,
 	Description text,
 	AppliedDate date,
-	Foreign Key(EmployeeID) References Employees(EmployeeID)
+	Foreign Key(EmployeeID) References Employees(EmployeeID) ON DELETE CASCADE
 );
 
 CREATE Table attendence(
 	EmployeeID text NOT NULL,
 	date DATE NOT NULL,
 status VARCHAR(10) NOT NULL,
-	Foreign Key(EmployeeID) References Employees(EmployeeID)
+	Foreign Key(EmployeeID) References Employees(EmployeeID) ON DELETE CASCADE
 );

@@ -1,0 +1,39 @@
+<!-- using ejs-mate -->
+<% layout("./layout/admin") %>
+<div class="container mt-5">
+    <h1 class="text-center mb-4 fw-bolder">Employee Details</h1>
+
+    <div class="card">
+      <div class="card-header">
+        <b>Details of Employee ID:<%= Employee.employeeid  %></b>
+      </div>
+      <div class="card-body">
+        <%if(Employee.firstname + " " + Employee.lastname!=null){%>
+          <p class="card-title"><b>Name : </b> <%= Employee.firstname + " " + Employee.lastname %></p>
+        <%}%>
+        <%if(Employee.email!=null){%>
+        <p class="card-text"><b>Email : </b><%= Employee.email %> </p>
+        <%}%>
+         <%if(Employee.doj.toDateString()!=null){%>
+        <p class="card-text"><b>Joining Date : </b><%= Employee.doj.toDateString() %></p>
+        <%}%>
+         <%if( Employee.deptname!=null){%>
+        <p class="card-text"><b>Department : </b><%= Employee.deptname %></p>
+        <%}%>
+         <%if(Employee.position!=null){%>
+        <p class="card-text"><b>position : </b><%= Employee.position %></p>
+        <%}%>
+         <%if( Employee.location!=null){%>
+        <p class="card-text"><b>Branch : </b><%= Employee.location %></p>
+        <%}%>
+         <%if(Employee.salary!=null){%>
+        <p class="card-text"><b>Salary : </b><%= Employee.salary %></p>
+        <%}%>
+      </div> 
+    </div>
+    <div class="mt-4 sarthak">
+      <form method="post" action="/admin/<%= id %>/dashboard/view/<%= Employee.employeeid %>">
+        <button type="submit" class="btn btn-danger">Remove Employee <%= Employee.employeeid %></button>
+      </form>
+    </div>
+</div>
