@@ -74,15 +74,22 @@ module.exports.renderProfile = async (req, res) => {
 
 // update profile 
 module.exports.updateProfile = async (req, res) => {
-
     let id = req.params.id;
 
-    // for read file of photo 
-    let url = req.file.path;
-    // let filename = req.file.filename;
+    let image = await db.query("SELECT * from emp_image where employeeid=$1",[id]);
+    // for read file of photo
+    console.log( "image count : " , image.rowCount);
 
-    // console.log("Url : " + url);
-    console.log(url);
+    if(image.rowCount < 1){
+        let url = req.file.path;
+        // let filename = req.file.filename;
+        
+        console.log(url);
+        // console.log("Url : " + url);
+        let emp_img = await db.query("insert into emp_image values($1,$2)",[id,url]);
+    }
+
+
     // console.log(req.body);
     // console.log(filename);
 
@@ -100,8 +107,8 @@ module.exports.updateProfile = async (req, res) => {
     console.log("Update : " + dob);
     
     let emp = await db.query("UPDATE employees SET dob=$1,gender=$2,address=$3,phone=$4 WHERE employeeid=$5",[dob,gender,Address,Mo,id]);
-    let dl = await db.query("DELETE FROM emp_image WHERE employeeid=$1",[id]);
-    let emp_img = await db.query("insert into emp_image values($1,$2)",[id,url]);
+    // let dl = await db.query("DELETE FROM emp_image WHERE employeeid=$1",[id]);
+ 
     // let img = await db.query("update EMP_IMAGE set image_url=$1 WHERE employeeid=$2",[url,id]);
 
     req.flash("success","Profile updated successfully");

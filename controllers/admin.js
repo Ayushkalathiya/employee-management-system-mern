@@ -144,8 +144,25 @@ module.exports.renderProfile = async (req, res) => {
 module.exports.updateProfile = async (req, res) => {
   let id = req.params.id;
 
+  console.log(id);
+
+  let image = await db.query("SELECT * from emp_image where employeeid=$1",[id]);
   // for read file of photo
-  let url = req.file.path;
+  // console.log(image);
+  console.log( "image count : " , image.rowCount);
+
+  if(image.rowCount < 1){
+      let url = req.file.path;
+      // let filename = req.file.filename;
+      
+      console.log(url);
+      // console.log("Url : " + url);
+      let emp_img = await db.query("insert into emp_image values($1,$2)",[id,url]);
+  }
+
+
+  // for read file of photo
+
   // let filename = req.file.filename;
 
   // console.log(url);
@@ -168,12 +185,7 @@ module.exports.updateProfile = async (req, res) => {
     "UPDATE employees SET dob=$1,gender=$2,address=$3,phone=$4 WHERE employeeid=$5",
     [dob, gender, Address, Mo, id]
   );
-  let dl = await db.query("DELETE FROM emp_image WHERE employeeid=$1", [id]);
-  let emp_img = await db.query("insert into emp_image values($1,$2)", [
-    id,
-    url,
-  ]);
-
+ 
   req.flash("success", "Profile updated successfully");
   res.redirect(`/admin/${id}/profile`);
 };
@@ -362,6 +374,7 @@ module.exports.addEmployee = async (req, res) => {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
+      res.redirect(`/admin/${id}/addEmp`)
     } else {
       console.log("Email sent: " + info.response);
     }
@@ -649,8 +662,8 @@ let allemployees = [];
 module.exports.dashboard = async (req, res) => {
   let id = req.params.id;
   allemployees = await db.query(
-    `Select * from Employees e,Departments d where e.DeptID=d.DeptID`
-  );
+    `Select * from Employees e,Departments d where e.DeptID=d.DeptID and e.employeeid!=$1`,[id]
+  ); 
   console.log(allemployees.rows);
   res.render("./pages/Admin/admindashboard.ejs", {
     allemployees: allemployees.rows,
@@ -677,13 +690,16 @@ module.exports.dashboardViewEmp = async (req, res) => {
 module.exports.dashboardDeleteEmp = async (req, res) => {
   const id = req.params.id;
   let empid = req.params.empid;
-  console.log("\n\n Employee :",empid ," is Deleted from System\n\n");
+  
+  console.log(empid);
 
-  const Emp_imagedel=await db.query("DELETE FROM Emp_image WHERE employeeID=$1;",[empid]);
-  const Credentialsdel=await db.query("DELETE FROM Credentials WHERE employeeID=$1;",[empid]);
-  const LeaveRequestsdel=await db.query("DELETE FROM LeaveRequests WHERE employeeID=$1;",[empid]);
-  const attendencedel=await db.query("DELETE FROM attendence WHERE employeeID=$1;",[empid]);
-  const Employeesdel=await db.query("DELETE FROM employees WHERE employeeid=$1;",[empid]);
-
+  const Emp_imagedel=await db.query("DELETE FROM emp_image WHERE employeeid=$1",[empid]);
+  const Credentialsdel=await db.query("DELETE FROM credentials WHERE employeeid=$1",[empid]);
+  const LeaveRequestsdel=await db.query("DELETE FROM leaverequests WHERE employeeid=$1",[empid]);
+  const attendencedel=await db.query("DELETE FROM attendence WHERE employeeid=$1",[empid]);
+  const reset=await db.query("DELETE FROM resetpass WHERE employeeid=$1",[empid]);
+  const Employeesdel=await db.query("DELETE FROM employees WHERE employeeid=$1",[empid]);
+  
+  console.log("\n\n Employee :"+ empid +" is Deleted from System\n\n");
   res.redirect(`/admin/${id}/dashboard`);
 };
